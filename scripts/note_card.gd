@@ -1,4 +1,6 @@
 class_name NoteCard extends Panel
+@onready var note_1: Panel = $Note1
+@onready var note_2: Panel = $Note2
 
 @export var notes: Array[float]
 var notes_dictionary: Dictionary
@@ -20,9 +22,23 @@ func construct_notes_dictionary(note_durations_array: Array) -> void:
 		notes_dictionary[index] = {}
 		notes_dictionary[index]["duration"] = note
 		notes_dictionary[index]["status"] = note_status_types.INACTIVE
+		if index == 0:
+			notes_dictionary[index]["game_object"] = note_1
+		elif index == 1:
+			notes_dictionary[index]["game_object"] = note_2
 		index += 1
 	calculate_note_timings()
+	update_note_visuals()
 	print(notes_dictionary)
+
+func update_note_visuals() -> void:
+	for i in notes_dictionary.size():
+		match notes_dictionary[i]["status"]:
+			note_status_types.INACTIVE:
+				notes_dictionary[i]["game_object"].modulate =  Color.RED
+			note_status_types.PLAYED:
+				notes_dictionary[i]["game_object"].modulate =  Color.GREEN
+			
 
 func calculate_note_timings() -> void:
 	var time_before_card_starts: float = game.one_beat_duration * (beat_num-1)
@@ -60,17 +76,18 @@ func automatic_note_play(time: float) -> void:
 				notes_triggered[count] = true
 		count += 1
 
-func automatic_note_play_dictionary(time: float) -> void:
+func autoplay(time: float) -> void:
 	for i in range(notes_dictionary.size()):
 		if notes_dictionary[i]["status"] == note_status_types.INACTIVE:
 			if time >= notes_dictionary[i]["timing"]:
 				print("dict triggerd " + str(notes_dictionary[i]["timing"]))
 				notes_dictionary[i]["status"] = note_status_types.PLAYED
+	update_note_visuals()
 
 func _process(delta: float) -> void:
 	if active:
 		#automatic_note_play(game.elapsed_round_time)
-		automatic_note_play_dictionary(game.elapsed_round_time)
+		autoplay(game.elapsed_round_time)
 
 func set_note_timings(notes_array: Array = notes) -> void:
 	note_timings.clear()
@@ -104,6 +121,6 @@ func reset_note_triggers() -> void:
 
 func toggle_highlight(toggle: bool) -> void:
 	if toggle:
-		modulate = Color.BLACK
-	else:
 		modulate = Color.WHITE
+	else:
+		modulate = Color.GRAY
