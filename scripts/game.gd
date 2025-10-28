@@ -1,4 +1,6 @@
 class_name Game extends Control
+@onready var music_player: AudioStreamPlayer = $MusicPlayer
+
 var one_beat_duration: float = 1
 var one_beat_value: float = 0.25
 var one_beat_duration_counter: float = 0
@@ -9,16 +11,22 @@ var number_of_beats_in_round: int
 var tempo: float = 60
 var round_duration: float
 var elapsed_round_time: float = 0
+var round_num: float:
+	set(value):
+		round_num = value
+		if not music_player.playing and round_num >= 0:
+			music_player.play(round_num*round_duration)
 #@export var note_cards: Array[Panel]
 #@onready var note_card_1: Panel = $CanvasLayer/NoteCard1
 signal beat_signal
 signal round_changed
 
 func _ready() -> void:
-	one_beat_duration = tempo / 60
+	one_beat_duration = tempo / 135
 	print(one_beat_duration)
 	number_of_beats_in_round = time_signature * number_of_bars
 	round_duration = number_of_beats_in_round * one_beat_duration
+	round_num = -1
 	emit_signal("round_changed")
 	emit_signal("beat_signal",beat_num)
 
@@ -57,3 +65,7 @@ func _on_beat_signal(beat_num: int) -> void:
 		#note_cards[card_num].active = true
 	#else:
 		#push_error("no card with num " + str(card_num))
+
+
+func _on_round_changed() -> void:
+	round_num += 1
