@@ -20,7 +20,7 @@ func _ready() -> void:
 	#for note in notes:
 		#notes_triggered.append(false)
 
-func check_note_time_triggers(time: float) -> void:
+func automatic_note_play(time: float) -> void:
 	var count: int = 0
 	for note_timing: float in note_timings:
 		if not notes_triggered[count]:
@@ -31,7 +31,7 @@ func check_note_time_triggers(time: float) -> void:
 
 func _process(delta: float) -> void:
 	if active:
-		check_note_time_triggers(game.elapsed_round_time)
+		automatic_note_play(game.elapsed_round_time)
 
 func set_note_timings(notes_array: Array = notes) -> void:
 	note_timings.clear()

@@ -49,6 +49,9 @@ func clear_cards_visuals() -> void:
 func higlight_card(num: int) -> void:
 	note_cards[num].modulate = Color.BLACK
 
+func choose_max_active_card() -> void:
+	pass
+
 func enable_card(card_num: int) -> void:
 	if card_num in note_cards:
 		note_cards[card_num].active = true
