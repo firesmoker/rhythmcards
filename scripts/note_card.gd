@@ -44,7 +44,8 @@ func _ready() -> void:
 	game = find_parent("Game")
 	if game != null:
 		game.beat_signal.connect(toggle_by_beat)
-		game.round_changed.connect(set_note_timings.bind(notes))
+		#game.round_changed.connect(set_note_timings.bind(notes))
+		game.round_changed.connect(construct_notes_dictionary.bind(notes))
 	construct_notes_dictionary(notes)
 	#reset_note_triggers()
 	#for note in notes:
@@ -59,9 +60,17 @@ func automatic_note_play(time: float) -> void:
 				notes_triggered[count] = true
 		count += 1
 
+func automatic_note_play_dictionary(time: float) -> void:
+	for i in range(notes_dictionary.size()):
+		if notes_dictionary[i]["status"] == note_status_types.INACTIVE:
+			if time >= notes_dictionary[i]["timing"]:
+				print("dict triggerd " + str(notes_dictionary[i]["timing"]))
+				notes_dictionary[i]["status"] = note_status_types.PLAYED
+
 func _process(delta: float) -> void:
 	if active:
-		automatic_note_play(game.elapsed_round_time)
+		#automatic_note_play(game.elapsed_round_time)
+		automatic_note_play_dictionary(game.elapsed_round_time)
 
 func set_note_timings(notes_array: Array = notes) -> void:
 	note_timings.clear()
