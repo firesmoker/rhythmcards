@@ -8,7 +8,7 @@ var number_of_bars: int = 1
 var number_of_beats_in_round: int
 var tempo: float = 60
 var round_duration: float
-var elapsed_time: float = 0
+var elapsed_round_time: float = 0
 @export var note_cards: Array[Panel]
 @onready var note_card_1: Panel = $CanvasLayer/NoteCard1
 signal beat_signal
@@ -23,8 +23,9 @@ func _ready() -> void:
 	emit_signal("beat_signal",beat_num)
 
 func _process(delta: float) -> void:
-	elapsed_time += delta
-	beat_counter(delta)		
+	elapsed_round_time += delta
+	#print(elapsed_round_time)
+	beat_counter(delta)
 
 func beat_counter(delta: float) -> void:
 	one_beat_duration_counter += delta
@@ -33,9 +34,14 @@ func beat_counter(delta: float) -> void:
 		one_beat_duration_counter -= one_beat_duration
 		if beat_num > number_of_beats_in_round:
 			beat_num = 1
+			elapsed_round_time = 0
+			emit_signal("round_changed")
 		emit_signal("beat_signal",beat_num)
 		print("beat_signal")
 	
+func _on_beat_signal(beat_num: int) -> void:
+	pass
+
 func clear_cards_visuals() -> void:
 	for card in note_cards:
 		card.modulate = Color.WHITE
@@ -43,11 +49,8 @@ func clear_cards_visuals() -> void:
 func higlight_card(num: int) -> void:
 	note_cards[num].modulate = Color.BLACK
 
-func _on_beat_signal(beat_num: int) -> void:
-	print("beat signal func")
-	#clear_cards_visuals()
-	if beat_num != 0:
-		#higlight_card(beat_num - 1)
-		pass
-		#note_cards[beat_num - 1].modulate = Color.BLACK
-	#note_card_1.modulate = Color.BLACK
+func enable_card(card_num: int) -> void:
+	if card_num in note_cards:
+		note_cards[card_num].active = true
+	else:
+		push_error("no card with num " + str(card_num))
