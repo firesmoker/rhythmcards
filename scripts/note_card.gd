@@ -79,11 +79,18 @@ func _ready() -> void:
 
 func autoplay(time: float) -> void:
 	for i in range(notes_dictionary.size()):
-		if notes_dictionary[i]["status"] == note_status_types.INACTIVE:
+		if notes_dictionary[i]["status"] == note_status_types.ACTIVE:
 			if time >= notes_dictionary[i]["timing"]:
-				print("dict triggerd " + str(notes_dictionary[i]["timing"]))
-				notes_dictionary[i]["status"] = note_status_types.PLAYED
+				#print("dict triggerd " + str(notes_dictionary[i]["timing"]))
+				play_note_by_index(i)
+				#notes_dictionary[i]["status"] = note_status_types.PLAYED
 	update_note_visuals()
+
+func play_note_by_index(note_index: int) -> void:
+	if note_index in notes_dictionary:
+		notes_dictionary[note_index]["status"] = note_status_types.PLAYED
+	if note_index + 1 in notes_dictionary:
+		notes_dictionary[note_index + 1]["status"] = note_status_types.ACTIVE
 
 func _process(delta: float) -> void:
 	if active:
@@ -107,9 +114,13 @@ func _process(delta: float) -> void:
 		#print("for card " + str(name) + " note " + str(count) + " timing is " + str(note_timings[count - 1]))
 	#reset_note_triggers()
 
-func toggle_by_beat(round_beat: int) -> void:
+func toggle_by_beat(round_beat: int, verify: bool = true) -> void:
+	if verify:
+		if game.beat_num != round_beat:
+			return
 	if round_beat == beat_num:
 		active = true
+		activate_note_by_index(0)
 	else:
 		active = false
 

@@ -44,6 +44,7 @@ func _process(delta: float) -> void:
 	beat_counter(delta)
 	if last_note_card_finished == beat_num:
 		print("ready to pass to next card: " + str(last_note_card_finished + 1))
+		emit_signal("activate_signal",last_note_card_finished + 1,false)
 
 func pre_beat_counter(delta: float) -> void:
 	pre_beat_duration_counter += delta
