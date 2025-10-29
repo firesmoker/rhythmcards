@@ -62,6 +62,7 @@ func _ready() -> void:
 		game.beat_signal.connect(toggle_by_beat)
 		#game.round_changed.connect(set_note_timings.bind(notes))
 		game.round_changed.connect(construct_notes_dictionary.bind(notes))
+		game.activate_signal.connect(toggle_by_beat)
 	construct_notes_dictionary(notes)
 	#reset_note_triggers()
 	#for note in notes:
@@ -88,6 +89,7 @@ func _process(delta: float) -> void:
 	if active:
 		#automatic_note_play(game.elapsed_round_time)
 		autoplay(game.elapsed_round_time)
+		update_when_all_notes_finished()
 
 #func set_note_timings(notes_array: Array = notes) -> void:
 	#note_timings.clear()
@@ -115,6 +117,21 @@ func toggle_by_beat(round_beat: int) -> void:
 	#notes_triggered.clear()
 	#for note in notes:
 		#notes_triggered.append(false)
+
+func update_when_all_notes_finished() -> void:
+	for note in notes_dictionary:
+		match notes_dictionary[note]["status"]:
+			note_status_types.INACTIVE:
+				return
+			note_status_types.ACTIVE:
+				return
+	game.last_note_card_finished = beat_num
+	print("last note card finished in game: " + str(game.last_note_card_finished))
+
+func activate_note_by_index(index: int) -> void:
+	if index in notes_dictionary:
+		if notes_dictionary[index]["status"] == note_status_types.INACTIVE:
+			notes_dictionary[index]["status"] = note_status_types.ACTIVE
 
 func toggle_highlight(toggle: bool) -> void:
 	if toggle:
