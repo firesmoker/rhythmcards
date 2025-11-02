@@ -6,7 +6,7 @@ var one_beat_value: float = 0.25
 var one_beat_duration_counter: float = 0
 
 var pre_beat_duration_counter: float = 0
-var pre_beat_num: int = 1
+#var pre_beat_num: int = 1
 
 var last_note_card_finished: int = 0
 
@@ -25,12 +25,17 @@ var round_num: float:
 #@export var note_cards: Array[Panel]
 #@onready var note_card_1: Panel = $CanvasLayer/NoteCard1
 signal beat_signal
+signal play_signal
 signal activate_signal
 signal round_changed
 
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("play"):
+		emit_signal("play_signal",elapsed_round_time)
+
 func _ready() -> void:
 	one_beat_duration = tempo / 135
-	print(one_beat_duration)
+	#print(one_beat_duration)
 	number_of_beats_in_round = time_signature * number_of_bars
 	round_duration = number_of_beats_in_round * one_beat_duration
 	round_num = -1
@@ -40,20 +45,20 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	elapsed_round_time += delta
 	#print(elapsed_round_time)
-	pre_beat_counter(delta)
+	#pre_beat_counter(delta)
 	beat_counter(delta)
 	if last_note_card_finished == beat_num:
-		print("ready to pass to next card: " + str(last_note_card_finished + 1))
+		#print("ready to pass to next card: " + str(last_note_card_finished + 1))
 		emit_signal("activate_signal",last_note_card_finished + 1,false)
 
-func pre_beat_counter(delta: float) -> void:
-	pre_beat_duration_counter += delta
-	if pre_beat_duration_counter >= one_beat_duration/2:
-		pre_beat_num += 1
-		pre_beat_num -= one_beat_duration
-		if pre_beat_num > number_of_beats_in_round:
-			pre_beat_num = 1
-			elapsed_round_time = 0
+#func pre_beat_counter(delta: float) -> void:
+	#pre_beat_duration_counter += delta
+	#if pre_beat_duration_counter >= one_beat_duration/2:
+		#pre_beat_num += 1
+		#pre_beat_num -= one_beat_duration
+		#if pre_beat_num > number_of_beats_in_round:
+			#pre_beat_num = 1
+			#elapsed_round_time = 0
 
 func beat_counter(delta: float) -> void:
 	one_beat_duration_counter += delta
@@ -64,11 +69,12 @@ func beat_counter(delta: float) -> void:
 			beat_num = 1
 			elapsed_round_time = 0
 			emit_signal("round_changed")
+			last_note_card_finished = -1
 		emit_signal("beat_signal",beat_num)
-		print("beat_signal")
+		#print("beat_signal")
 	
 func _on_beat_signal(beat_num: int) -> void:
-	pass
+	print(beat_num)
 #
 #func clear_cards_visuals() -> void:
 	#for card in note_cards:

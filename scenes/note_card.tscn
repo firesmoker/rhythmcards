@@ -32,3 +32,5 @@ offset_left = 77.0
 offset_top = 50.0
 offset_right = 117.0
 offset_bottom = 90.0
+
+[node name="DeactivateTimer" type="Timer" parent="."]
