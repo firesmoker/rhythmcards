@@ -113,7 +113,11 @@ func play(time: float) -> void:
 	if active:
 		for i in range(notes_dictionary.size()):
 			if notes_dictionary[i]["status"] == note_status_types.ACTIVE:
-				if time >= notes_dictionary[i]["timing"]:
+				if time >= notes_dictionary[i]["timing"] + notes_dictionary[i]["duration"] / 2:
+					play_note_by_index(i,true)
+				elif time >= notes_dictionary[i]["timing"]:
+					play_note_by_index(i)
+				elif time < notes_dictionary[i]["timing"] and time > notes_dictionary[i]["timing"] - notes_dictionary[i]["duration"] / 2:
 					play_note_by_index(i)
 				else:
 					play_note_by_index(i, true)
