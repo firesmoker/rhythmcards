@@ -1,6 +1,6 @@
 class_name NoteCard extends Panel
-@onready var note_1: Panel = $Note1
-@onready var note_2: Panel = $Note2
+@onready var note_1: TextureRect = $Note1
+@onready var note_2: TextureRect = $Note2
 @onready var deactivate_timer: Timer = $DeactivateTimer
 
 @export var notes: Array[float]
@@ -17,8 +17,17 @@ var active: bool:
 @export var beat_num: int = 1
 var game: Game
 
+func set_notes_visibility() -> void:
+	note_1.visible = false
+	note_2.visible = false
+	for note in notes_dictionary:
+		if notes_dictionary[note]["game_object"] != null:
+			notes_dictionary[note]["game_object"].visible = true
+			
+
 func round_changed_effects(stage_index: int) -> void:
 	construct_notes_dictionary(extract_beat_notes_from_full_round(game.stage_note_arrays[stage_index]))
+	set_notes_visibility()
 	disable_deactivation_timer()
 
 func disable_deactivation_timer() -> void:
@@ -70,12 +79,12 @@ func clear_note_visuals() -> void:
 func update_note_visuals() -> void:
 	for i in notes_dictionary.size():
 		match notes_dictionary[i]["status"]:
-			note_status_types.INACTIVE:
-				notes_dictionary[i]["game_object"].modulate =  Color.RED
+			#note_status_types.INACTIVE: ## DEBUG
+				#notes_dictionary[i]["game_object"].modulate =  Color.RED
 			note_status_types.MISSED:
 				notes_dictionary[i]["game_object"].modulate =  Color.ORANGE
-			note_status_types.ACTIVE:
-				notes_dictionary[i]["game_object"].modulate =  Color.BLUE	
+			#note_status_types.ACTIVE: ## DEBUG
+				#notes_dictionary[i]["game_object"].modulate =  Color.BLUE	
 			note_status_types.PLAYED:
 				notes_dictionary[i]["game_object"].modulate =  Color.GREEN
 			note_status_types.PLAYED_BAD:
@@ -144,6 +153,7 @@ func activate_signal_effects(round_beat: int, verify: bool = true) -> void:
 	if round_beat == beat_num:
 		print(str(beat_num) + " card activated")
 
+
 func play(time: float) -> void:
 	if active:
 		for i in range(notes_dictionary.size()):
@@ -154,11 +164,19 @@ func play(time: float) -> void:
 					play_note_by_index(i)
 				elif time < notes_dictionary[i]["timing"] and time > notes_dictionary[i]["timing"] - notes_dictionary[i]["duration"] / 2:
 					play_note_by_index(i)
-				else:
+				elif time > notes_dictionary[i]["timing"] - notes_dictionary[i]["duration"]:
 					play_note_by_index(i, true)
+				else:
+					miss_note_by_index(i )
 				return
 		update_note_visuals()
 
+func miss_note_by_index(note_index: int) -> void:
+	if note_index in notes_dictionary:
+		
+		notes_dictionary[note_index]["status"] = note_status_types.MISSED
+		if note_index + 1 in notes_dictionary:
+			notes_dictionary[note_index + 1]["status"] = note_status_types.ACTIVE
 
 func play_note_by_index(note_index: int, bad_play: bool = false) -> void:
 	if note_index in notes_dictionary:
