@@ -1,5 +1,6 @@
 class_name Game extends Control
 @onready var music_player: AudioStreamPlayer = $MusicPlayer
+@onready var sfx_player: AudioStreamPlayer = $SFXPlayer
 
 var one_beat_duration: float = 1
 var one_beat_value: float = 0.25
@@ -31,6 +32,7 @@ signal round_changed
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("play"):
+		sfx_player.play()
 		emit_signal("play_signal",elapsed_round_time)
 
 func construct_dummy_level() -> void:

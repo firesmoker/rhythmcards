@@ -6,6 +6,7 @@ class_name NoteCard extends Panel
 @export var notes: Array[float]
 @export var next_notes: Array[float]
 var notes_dictionary: Dictionary
+var next_notes_dictionary: Dictionary
 enum note_status_types {ACTIVE,MISSED,PLAYED,PLAYED_BAD,INACTIVE}
 #var note_timings: Array[float]
 #var notes_triggered: Array[bool]
@@ -13,7 +14,7 @@ enum note_status_types {ACTIVE,MISSED,PLAYED,PLAYED_BAD,INACTIVE}
 var active: bool:
 	set(value):
 		active = value
-		toggle_highlight(value)
+		#toggle_highlight(value)
 @export var beat_num: int = 1
 var game: Game
 
@@ -27,6 +28,7 @@ func set_notes_visibility() -> void:
 
 func round_changed_effects(stage_index: int) -> void:
 	construct_notes_dictionary(extract_beat_notes_from_full_round(game.stage_note_arrays[stage_index]))
+	construct_notes_dictionary(extract_beat_notes_from_full_round(game.stage_note_arrays[stage_index + 1]),true)
 	set_notes_visibility()
 	disable_deactivation_timer()
 
@@ -51,25 +53,45 @@ func extract_beat_notes_from_full_round(notes_array: Array) -> Array:
 	return new_notes_array
 	
 
-func construct_notes_dictionary(note_durations_array: Array) -> void:
-	notes_dictionary.clear()
+
+func construct_notes_dictionary(note_durations_array: Array, next: bool = false) -> void:
 	var index: int = 0
-	for note in note_durations_array:
-		notes_dictionary[index] = {}
-		notes_dictionary[index]["duration"] = note
-		notes_dictionary[index]["status"] = note_status_types.INACTIVE
-		if index == 0:
-			notes_dictionary[index]["game_object"] = note_1
-		elif index == 1:
-			notes_dictionary[index]["game_object"] = note_2
-		else:
-			notes_dictionary[index]["game_object"] = note_2
-		index += 1
-		
-	print("note_dictionary is: " + str(notes_dictionary))
-	calculate_note_timings()
-	clear_note_visuals()
-	update_note_visuals()
+	if not next:
+		notes_dictionary.clear()
+		for note in note_durations_array:
+			notes_dictionary[index] = {}
+			notes_dictionary[index]["duration"] = note
+			notes_dictionary[index]["status"] = note_status_types.INACTIVE
+			if index == 0:
+				notes_dictionary[index]["game_object"] = note_1
+			elif index == 1:
+				notes_dictionary[index]["game_object"] = note_2
+			else:
+				notes_dictionary[index]["game_object"] = note_2
+			index += 1
+			
+		print("note_dictionary is: " + str(notes_dictionary))
+		calculate_note_timings()
+		clear_note_visuals()
+		update_note_visuals()
+	else:
+		next_notes_dictionary.clear()
+		for note in note_durations_array:
+			next_notes_dictionary[index] = {}
+			next_notes_dictionary[index]["duration"] = note
+			next_notes_dictionary[index]["status"] = note_status_types.INACTIVE
+			if index == 0:
+				next_notes_dictionary[index]["game_object"] = note_1
+			elif index == 1:
+				next_notes_dictionary[index]["game_object"] = note_2
+			else:
+				next_notes_dictionary[index]["game_object"] = note_2
+			index += 1
+			
+		print("note_dictionary is: " + str(notes_dictionary))
+		calculate_note_timings()
+		clear_note_visuals()
+		update_note_visuals()
 	#print("note_card: " + name + str(notes_dictionary))
 
 func clear_note_visuals() -> void:
