@@ -4,6 +4,7 @@ class_name NoteCard extends Panel
 @onready var deactivate_timer: Timer = $DeactivateTimer
 
 @export var notes: Array[float]
+@export var next_notes: Array[float]
 var notes_dictionary: Dictionary
 enum note_status_types {ACTIVE,MISSED,PLAYED,PLAYED_BAD,INACTIVE}
 #var note_timings: Array[float]
@@ -16,8 +17,30 @@ var active: bool:
 @export var beat_num: int = 1
 var game: Game
 
+func round_changed_effects(stage_index: int) -> void:
+	construct_notes_dictionary(extract_beat_notes_from_full_round(game.stage_note_arrays[stage_index]))
+	disable_deactivation_timer()
+
 func disable_deactivation_timer() -> void:
 	deactivate_timer.stop()
+
+func extract_beat_notes_from_full_round(notes_array: Array) -> Array:
+	var new_notes_array: Array
+	var previous_beats_duration: float = game.one_beat_value * (beat_num -1)
+	var previous_beats_duration_counter: float = 0
+	var current_beat_duration_counter: float = 0
+	for note: float in notes_array:
+		print(note)
+		if previous_beats_duration_counter < previous_beats_duration:
+			previous_beats_duration_counter += note
+		elif current_beat_duration_counter < game.one_beat_value:
+			new_notes_array.append(note)
+			current_beat_duration_counter += note
+		else:
+			break
+	print("new note array is: " + str(new_notes_array))
+	return new_notes_array
+	
 
 func construct_notes_dictionary(note_durations_array: Array) -> void:
 	notes_dictionary.clear()
@@ -30,10 +53,19 @@ func construct_notes_dictionary(note_durations_array: Array) -> void:
 			notes_dictionary[index]["game_object"] = note_1
 		elif index == 1:
 			notes_dictionary[index]["game_object"] = note_2
+		else:
+			notes_dictionary[index]["game_object"] = note_2
 		index += 1
+		
+	print("note_dictionary is: " + str(notes_dictionary))
 	calculate_note_timings()
+	clear_note_visuals()
 	update_note_visuals()
 	#print("note_card: " + name + str(notes_dictionary))
+
+func clear_note_visuals() -> void:
+	note_1.modulate =  Color.BLACK
+	note_2.modulate =  Color.BLACK
 
 func update_note_visuals() -> void:
 	for i in notes_dictionary.size():
@@ -67,6 +99,7 @@ func calculate_note_timings() -> void:
 		#print("for card " + str(name) + " note " + str(i) + " timing is " + str(notes_dictionary[i]["timing"]))
 
 func _ready() -> void:
+	#next_notes = notes.duplicate()
 	active = false
 	pivot_offset.x = 0 + size.x / 2
 	pivot_offset.y = 0 + size.y / 2
@@ -75,12 +108,14 @@ func _ready() -> void:
 		game.beat_signal.connect(beat_signal_effects)
 		game.play_signal.connect(play)
 		#game.round_changed.connect(set_note_timings.bind(notes))
-		game.round_changed.connect(construct_notes_dictionary.bind(notes))
-		game.round_changed.connect(disable_deactivation_timer)
+		game.round_changed.connect(round_changed_effects)
+		#game.round_changed.connect(construct_notes_dictionary.bind(notes))
+		#game.round_changed.connect(disable_deactivation_timer)
 		#game.beat_signal.connect(allow_note_activation)
 		game.activate_signal.connect(toggle_by_beat)
 		game.activate_signal.connect(activate_signal_effects)
-	construct_notes_dictionary(notes)
+	#construct_notes_dictionary(notes)
+	#construct_notes_dictionary(extract_beat_notes_from_full_round(game.stage_note_arrays[0]))
 
 func start_deactivation_timer(round_beat: int,time: float) -> void:
 	if beat_num == round_beat:
