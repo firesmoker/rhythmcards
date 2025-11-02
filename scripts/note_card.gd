@@ -46,6 +46,8 @@ func update_note_visuals() -> void:
 				notes_dictionary[i]["game_object"].modulate =  Color.BLUE	
 			note_status_types.PLAYED:
 				notes_dictionary[i]["game_object"].modulate =  Color.GREEN
+			note_status_types.PLAYED_BAD:
+				notes_dictionary[i]["game_object"].modulate =  Color.GREEN_YELLOW
 			
 
 func calculate_note_timings() -> void:
@@ -65,6 +67,9 @@ func calculate_note_timings() -> void:
 		#print("for card " + str(name) + " note " + str(i) + " timing is " + str(notes_dictionary[i]["timing"]))
 
 func _ready() -> void:
+	active = false
+	pivot_offset.x = 0 + size.x / 2
+	pivot_offset.y = 0 + size.y / 2
 	game = find_parent("Game")
 	if game != null:
 		game.beat_signal.connect(beat_signal_effects)
@@ -88,12 +93,15 @@ func deactivate() -> void:
 		match notes_dictionary[note]["status"]:
 			note_status_types.PLAYED:
 				pass
+			note_status_types.PLAYED_BAD:
+				pass
 			_:
 				notes_dictionary[note]["status"] = note_status_types.MISSED
 	update_note_visuals()
 	active = false
 
 func beat_signal_effects(round_beat: int, verify: bool = true) -> void:
+	pulse(round_beat)
 	start_deactivation_timer(round_beat, game.one_beat_duration)
 	toggle_by_beat(round_beat, true)
 
@@ -107,19 +115,26 @@ func play(time: float) -> void:
 			if notes_dictionary[i]["status"] == note_status_types.ACTIVE:
 				if time >= notes_dictionary[i]["timing"]:
 					play_note_by_index(i)
+				else:
+					play_note_by_index(i, true)
 				return
 		update_note_visuals()
 
-func play_note_by_index(note_index: int) -> void:
+
+func play_note_by_index(note_index: int, bad_play: bool = false) -> void:
 	if note_index in notes_dictionary:
 		if notes_dictionary[note_index]["status"] == note_status_types.ACTIVE:
-			notes_dictionary[note_index]["status"] = note_status_types.PLAYED
+			if bad_play:
+				notes_dictionary[note_index]["status"] = note_status_types.PLAYED_BAD
+			else:
+				notes_dictionary[note_index]["status"] = note_status_types.PLAYED
 		if note_index + 1 in notes_dictionary:
 			notes_dictionary[note_index + 1]["status"] = note_status_types.ACTIVE
 
 func _process(delta: float) -> void:
 	if active:
 		#autoplay(game.elapsed_round_time)
+		#play(game.elapsed_round_time)
 		handle_deactivate_and_allow_next_card()
 	update_note_visuals()
 
@@ -160,6 +175,12 @@ func toggle_highlight(toggle: bool) -> void:
 		modulate = Color.WHITE
 	else:
 		modulate = Color.GRAY
+
+func pulse(round_beat: int,time: float = 0.2) -> void:
+	if round_beat == beat_num:
+		scale = scale*1.15
+		await get_tree().create_timer(time).timeout
+		scale = scale*1/1.15
 
 func allow_note_activation(beat_input: int) -> void:
 	if beat_input == beat_num:
