@@ -17,6 +17,7 @@ var active: bool:
 		#toggle_highlight(value)
 @export var beat_num: int = 1
 var game: Game
+@onready var selection_panel: Panel = $SelectionPanel
 
 func set_notes_visibility() -> void:
 	note_1.visible = false
@@ -135,13 +136,13 @@ func update_note_visuals() -> void:
 			#note_status_types.INACTIVE: ## DEBUG
 				#notes_dictionary[i]["game_object"].modulate =  Color.RED
 			note_status_types.MISSED:
-				notes_dictionary[i]["game_object"].modulate =  Color.ORANGE
+				notes_dictionary[i]["game_object"].modulate =  Color.FIREBRICK
 			#note_status_types.ACTIVE: ## DEBUG
 				#notes_dictionary[i]["game_object"].modulate =  Color.BLUE	
 			note_status_types.PLAYED:
-				notes_dictionary[i]["game_object"].modulate =  Color.GREEN
+				notes_dictionary[i]["game_object"].modulate =  Color.ROYAL_BLUE
 			note_status_types.PLAYED_BAD:
-				notes_dictionary[i]["game_object"].modulate =  Color.GREEN_YELLOW
+				notes_dictionary[i]["game_object"].modulate =  Color.CORAL
 			
 
 func calculate_note_timings() -> void:
@@ -161,6 +162,7 @@ func calculate_note_timings() -> void:
 		#print("for card " + str(name) + " note " + str(i) + " timing is " + str(notes_dictionary[i]["timing"]))
 
 func _ready() -> void:
+	selection_panel.visible = true
 	#next_notes = notes.duplicate()
 	active = false
 	pivot_offset.x = 0 + size.x / 2
@@ -198,7 +200,7 @@ func deactivate() -> void:
 	active = false
 
 func beat_signal_effects(round_beat: int, verify: bool = true) -> void:
-	pulse(round_beat)
+	selection_pulse(round_beat)
 	start_deactivation_timer(round_beat, game.one_beat_duration)
 	toggle_by_beat(round_beat, true)
 
@@ -242,6 +244,7 @@ func play_note_by_index(note_index: int, bad_play: bool = false) -> void:
 			notes_dictionary[note_index + 1]["status"] = note_status_types.ACTIVE
 
 func _process(delta: float) -> void:
+	selection_panel.self_modulate.a -= 0.01
 	if active:
 		#autoplay(game.elapsed_round_time)
 		#play(game.elapsed_round_time)
@@ -285,6 +288,12 @@ func toggle_highlight(toggle: bool) -> void:
 		modulate = Color.WHITE
 	else:
 		modulate = Color.GRAY
+
+func selection_pulse(round_beat: int,time: float = 0.2) -> void:
+	if round_beat == beat_num:
+		selection_panel.self_modulate.a = 1
+		#await get_tree().create_timer(time).timeout
+		#scale = scale*1/1.15
 
 func pulse(round_beat: int,time: float = 0.2) -> void:
 	if round_beat == beat_num:
