@@ -24,6 +24,6 @@ func set_visual(note_type: String = type, note_duration: String = duration) -> v
 			"eigth-single":
 				texture = single_eigth_image
 			"eigth-first":
-				pass
+				texture = first_eigth_image
 			"eigth-second":
-				pass
+				texture = second_eigth_image

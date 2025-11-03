@@ -21,6 +21,7 @@ var game: Game
 func set_notes_visibility() -> void:
 	note_1.visible = false
 	note_2.visible = false
+	var index: int = 0
 	for note in notes_dictionary:
 		if notes_dictionary[note]["game_object"] != null:
 			notes_dictionary[note]["game_object"].visible = true
@@ -29,9 +30,30 @@ func set_notes_visibility() -> void:
 				0.25:
 					note_duration = "quarter"
 				0.125:
-					note_duration = "eigth-single"
+					match decide_eigths_type():
+						"single": 
+							note_duration = "eigth-single"
+						"double":
+							if index == 0:
+								note_duration = "eigth-first"
+							else:
+								note_duration = "eigth-second"
 			notes_dictionary[note]["game_object"].set_note(note_duration)
-			
+		index += 1
+
+func decide_eigths_type() -> String:
+	var eighth_type: String = "single" # decide if this or double_eigth
+	var eigth_counter: int = 0
+	for note in notes_dictionary:
+		if notes_dictionary[note]["game_object"] != null:
+			var note_duration: String
+			match notes_dictionary[note]["duration"]:
+				0.125:
+					eigth_counter += 1
+			notes_dictionary[note]["game_object"].set_note(note_duration)
+	if eigth_counter == 2:
+		eighth_type = "double"
+	return eighth_type
 
 func round_changed_effects(stage_index: int) -> void:
 	if stage_index < game.stage_note_arrays.size():
