@@ -27,3 +27,8 @@ func set_visual(note_type: String = type, note_duration: String = duration) -> v
 				texture = first_eigth_image
 			"eigth-second":
 				texture = second_eigth_image
+
+func pulse(time: float = 0.2) -> void:
+	scale = scale*1.15
+	await get_tree().create_timer(time).timeout
+	scale = scale*1/1.15

@@ -1,19 +1,27 @@
 class_name NoteCard extends Panel
 @onready var note_1: Note = $Note1
 @onready var note_2: Note = $Note2
+@onready var display_note_1: Note = $NoteCardDisplay/DisplayNote1
+@onready var display_note_2: Note = $NoteCardDisplay/DisplayNote2
+
 @onready var deactivate_timer: Timer = $DeactivateTimer
-var display_card: bool = false
+@export var display_card: bool = false
 @export var notes: Array[float]
 @export var next_notes: Array[float]
 var notes_dictionary: Dictionary
+@onready var display_timer: Timer = $NoteCardDisplay/DisplayTimer
 var next_notes_dictionary: Dictionary
 enum note_status_types {ACTIVE,MISSED,PLAYED,PLAYED_BAD,INACTIVE}
 #var note_timings: Array[float]
 #var notes_triggered: Array[bool]
+@onready var note_card_display: Panel = $NoteCardDisplay
+
 @export var note_activation_allowed: bool = true
 var active: bool:
 	set(value):
 		active = value
+		if value == false:
+			start_display_timer()
 		#toggle_highlight(value)
 @export var beat_num: int = 1
 var game: Game
@@ -42,21 +50,22 @@ func set_notes_visibility() -> void:
 			notes_dictionary[note]["game_object"].set_note(note_duration)
 		index += 1
 
-func decide_eigths_type() -> String:
+func decide_eigths_type(dictionary: Dictionary = notes_dictionary) -> String:
 	var eighth_type: String = "single" # decide if this or double_eigth
 	var eigth_counter: int = 0
-	for note in notes_dictionary:
-		if notes_dictionary[note]["game_object"] != null:
+	for note in dictionary:
+		if dictionary[note]["game_object"] != null:
 			var note_duration: String
-			match notes_dictionary[note]["duration"]:
+			match dictionary[note]["duration"]:
 				0.125:
 					eigth_counter += 1
-			notes_dictionary[note]["game_object"].set_note(note_duration)
+			dictionary[note]["game_object"].set_note(note_duration)
 	if eigth_counter == 2:
 		eighth_type = "double"
 	return eighth_type
 
 func round_changed_effects(stage_index: int) -> void:
+	note_card_display.visible = false
 	if stage_index < game.stage_note_arrays.size():
 		construct_notes_dictionary(extract_beat_notes_from_full_round(game.stage_note_arrays[stage_index]))
 		if stage_index + 1 < game.stage_note_arrays.size():
@@ -83,8 +92,6 @@ func extract_beat_notes_from_full_round(notes_array: Array) -> Array:
 			break
 	print("new note array is: " + str(new_notes_array))
 	return new_notes_array
-	
-
 
 func construct_notes_dictionary(note_durations_array: Array, next: bool = false) -> void:
 	var index: int = 0
@@ -113,11 +120,11 @@ func construct_notes_dictionary(note_durations_array: Array, next: bool = false)
 			next_notes_dictionary[index]["duration"] = note
 			next_notes_dictionary[index]["status"] = note_status_types.INACTIVE
 			if index == 0:
-				next_notes_dictionary[index]["game_object"] = note_1
+				next_notes_dictionary[index]["game_object"] = display_note_1
 			elif index == 1:
-				next_notes_dictionary[index]["game_object"] = note_2
+				next_notes_dictionary[index]["game_object"] = display_note_2
 			else:
-				next_notes_dictionary[index]["game_object"] = note_2
+				next_notes_dictionary[index]["game_object"] = display_note_2
 			index += 1
 			
 		print("note_dictionary is: " + str(notes_dictionary))
@@ -140,10 +147,9 @@ func update_note_visuals() -> void:
 			#note_status_types.ACTIVE: ## DEBUG
 				#notes_dictionary[i]["game_object"].modulate =  Color.BLUE	
 			note_status_types.PLAYED:
-				notes_dictionary[i]["game_object"].modulate =  Color.ROYAL_BLUE
+				notes_dictionary[i]["game_object"].modulate =  Color(0.112, 0.835, 0.835)
 			note_status_types.PLAYED_BAD:
 				notes_dictionary[i]["game_object"].modulate =  Color.CORAL
-			
 
 func calculate_note_timings() -> void:
 	var time_before_card_starts: float = game.one_beat_duration * (beat_num-1)
@@ -186,6 +192,9 @@ func start_deactivation_timer(round_beat: int,time: float) -> void:
 		deactivate_timer.start(time)
 		await deactivate_timer.timeout
 		deactivate()
+
+func start_display_timer(time: float = 0.7) -> void:
+	display_timer.start(time)
 
 func deactivate() -> void:
 	for note in notes_dictionary:
@@ -251,7 +260,6 @@ func _process(delta: float) -> void:
 		handle_deactivate_and_allow_next_card()
 	update_note_visuals()
 
-
 func toggle_by_beat(round_beat: int, verify: bool = true) -> void:
 	if verify:
 		if game.beat_num != round_beat:
@@ -304,3 +312,34 @@ func pulse(round_beat: int,time: float = 0.2) -> void:
 func allow_note_activation(beat_input: int) -> void:
 	if beat_input == beat_num:
 		note_activation_allowed = true
+
+func set_next_display_notes_visibility() -> void:
+	display_note_1.visible = false
+	display_note_2.visible = false
+	var index: int = 0
+	for note in next_notes_dictionary:
+		if next_notes_dictionary[note]["game_object"] != null:
+			next_notes_dictionary[note]["game_object"].visible = true
+			var note_duration: String
+			match next_notes_dictionary[note]["duration"]:
+				0.25:
+					note_duration = "quarter"
+				0.125:
+					match decide_eigths_type(next_notes_dictionary):
+						"single": 
+							note_duration = "eigth-single"
+						"double":
+							if index == 0:
+								note_duration = "eigth-first"
+							else:
+								note_duration = "eigth-second"
+			next_notes_dictionary[note]["game_object"].set_note(note_duration)
+		index += 1
+
+func fade_in(time: float) -> void:
+	pass
+
+
+func _on_display_timer_timeout() -> void:
+	set_next_display_notes_visibility()
+	note_card_display.visible = true
