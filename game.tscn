@@ -53,8 +53,6 @@ notes = Array[float]([0.25])
 next_notes = Array[float]([0.125, 0.125])
 beat_num = 4
 
-[node name="NoteCard5" parent="CanvasLayer" instance=ExtResource("2_e2o6t")]
-
 [node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_feb5d")
 

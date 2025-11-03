@@ -1,8 +1,8 @@
 class_name NoteCard extends Panel
-@onready var note_1: TextureRect = $Note1
-@onready var note_2: TextureRect = $Note2
+@onready var note_1: Note = $Note1
+@onready var note_2: Note = $Note2
 @onready var deactivate_timer: Timer = $DeactivateTimer
-
+var display_card: bool = false
 @export var notes: Array[float]
 @export var next_notes: Array[float]
 var notes_dictionary: Dictionary
@@ -24,11 +24,20 @@ func set_notes_visibility() -> void:
 	for note in notes_dictionary:
 		if notes_dictionary[note]["game_object"] != null:
 			notes_dictionary[note]["game_object"].visible = true
+			var note_duration: String
+			match notes_dictionary[note]["duration"]:
+				0.25:
+					note_duration = "quarter"
+				0.125:
+					note_duration = "eigth-single"
+			notes_dictionary[note]["game_object"].set_note(note_duration)
 			
 
 func round_changed_effects(stage_index: int) -> void:
-	construct_notes_dictionary(extract_beat_notes_from_full_round(game.stage_note_arrays[stage_index]))
-	construct_notes_dictionary(extract_beat_notes_from_full_round(game.stage_note_arrays[stage_index + 1]),true)
+	if stage_index < game.stage_note_arrays.size():
+		construct_notes_dictionary(extract_beat_notes_from_full_round(game.stage_note_arrays[stage_index]))
+		if stage_index + 1 < game.stage_note_arrays.size():
+			construct_notes_dictionary(extract_beat_notes_from_full_round(game.stage_note_arrays[stage_index + 1]),true)
 	set_notes_visibility()
 	disable_deactivation_timer()
 
