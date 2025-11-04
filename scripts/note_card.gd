@@ -47,7 +47,7 @@ func set_notes_visibility() -> void:
 								note_duration = "eigth-first"
 							else:
 								note_duration = "eigth-second"
-			notes_dictionary[note]["game_object"].set_note(note_duration)
+			notes_dictionary[note]["game_object"].set_note(note_duration,notes_dictionary[note]["type"])
 		index += 1
 
 func decide_eigths_type(dictionary: Dictionary = notes_dictionary) -> String:
@@ -59,7 +59,7 @@ func decide_eigths_type(dictionary: Dictionary = notes_dictionary) -> String:
 			match dictionary[note]["duration"]:
 				0.125:
 					eigth_counter += 1
-			dictionary[note]["game_object"].set_note(note_duration)
+			#dictionary[note]["game_object"].set_note(note_duration)
 	if eigth_counter == 2:
 		eighth_type = "double"
 	return eighth_type
@@ -72,7 +72,9 @@ func round_changed_effects(stage_index: int) -> void:
 		if stage_index + 1 < game.stage_note_arrays.size():
 			construct_notes_dictionary(extract_beat_notes_from_full_round(game.stage_note_arrays[stage_index + 1]),true)
 	set_notes_visibility()
+	clear_note_visuals()
 	disable_deactivation_timer()
+	
 
 func disable_deactivation_timer() -> void:
 	deactivate_timer.stop()
@@ -101,6 +103,7 @@ func construct_notes_dictionary(note_durations_array: Array, next: bool = false)
 		for note in note_durations_array:
 			notes_dictionary[index] = {}
 			notes_dictionary[index]["duration"] = note[0]
+			notes_dictionary[index]["type"] = note[1]
 			notes_dictionary[index]["status"] = note_status_types.INACTIVE
 			if index == 0:
 				notes_dictionary[index]["game_object"] = note_1
@@ -112,14 +115,15 @@ func construct_notes_dictionary(note_durations_array: Array, next: bool = false)
 			
 		print("note_dictionary is: " + str(notes_dictionary))
 		calculate_note_timings()
-		clear_note_visuals()
+		#clear_note_visuals()
 		update_note_visuals()
 	else:
 		next_notes_dictionary.clear()
 		for note in note_durations_array:
 			next_notes_dictionary[index] = {}
-			next_notes_dictionary[index]["duration"] = note
+			next_notes_dictionary[index]["duration"] = note[0]
 			next_notes_dictionary[index]["status"] = note_status_types.INACTIVE
+			next_notes_dictionary[index]["type"] = note[1]
 			if index == 0:
 				next_notes_dictionary[index]["game_object"] = display_note_1
 			elif index == 1:
@@ -129,8 +133,8 @@ func construct_notes_dictionary(note_durations_array: Array, next: bool = false)
 			index += 1
 			
 		print("note_dictionary is: " + str(notes_dictionary))
-		calculate_note_timings()
-		clear_note_visuals()
+		#calculate_note_timings()
+		#clear_note_visuals()
 		update_note_visuals()
 	#print("note_card: " + name + str(notes_dictionary))
 
@@ -313,6 +317,7 @@ func allow_note_activation(beat_input: int) -> void:
 		note_activation_allowed = true
 
 func set_next_display_notes_visibility() -> void:
+	print("FUNC TRIG: set_next_display_notes_visibility, size: " + str(next_notes_dictionary.size()))
 	display_note_1.visible = false
 	display_note_2.visible = false
 	var index: int = 0
@@ -322,6 +327,7 @@ func set_next_display_notes_visibility() -> void:
 			var note_duration: String
 			match next_notes_dictionary[note]["duration"]:
 				0.25:
+					print("next duration is quarter")
 					note_duration = "quarter"
 				0.125:
 					match decide_eigths_type(next_notes_dictionary):
@@ -332,7 +338,12 @@ func set_next_display_notes_visibility() -> void:
 								note_duration = "eigth-first"
 							else:
 								note_duration = "eigth-second"
+					print("eigth types for next dict " + str(decide_eigths_type(next_notes_dictionary)))
+				_:
+					print("next dic note dur is: " + str(next_notes_dictionary[note]["duration"]))
 			next_notes_dictionary[note]["game_object"].set_note(note_duration)
+		else:
+			print("next dict object is null")
 		index += 1
 
 func display_card_fade_in(delta: float, time: float) -> void:

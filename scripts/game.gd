@@ -40,7 +40,11 @@ func construct_dummy_level() -> void:
 	var notes_for_odd_array: Array = [0.25,0.25,0.125,0.125,0.125,0.125,]
 	var odd_array: Array
 	for i in range(notes_for_odd_array.size()):
-		odd_array.append([notes_for_odd_array[i],"note"])
+		if i == 3:
+			odd_array.append([notes_for_odd_array[i],"note"])
+		else:
+			odd_array.append([notes_for_odd_array[i],"note"])
+			
 	var notes_for_even_array: Array = [0.125,0.125,0.125,0.125,0.25,0.25]
 	var even_array: Array
 	for i in range(notes_for_even_array.size()):
