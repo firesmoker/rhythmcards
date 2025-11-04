@@ -235,7 +235,12 @@ func play(time: float) -> void:
 					play_note_by_index(i, true)
 				else:
 					miss_note_by_index(i )
-				return
+				if notes_dictionary[i]["type"] == "note":
+					game.play_sound()
+				elif notes_dictionary[i]["type"] == "rest":
+					game.played_on_rest()
+				else:
+					return
 		update_note_visuals()
 
 func miss_note_by_index(note_index: int) -> void:

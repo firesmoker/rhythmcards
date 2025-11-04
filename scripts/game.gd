@@ -12,7 +12,7 @@ var last_note_card_finished: int = 0
 @export var stage_note_arrays: Array[Array]
 var beat_num: int = 1
 var time_signature: int = 4
-var number_of_bars: int = 1
+var number_of_bars: int = 2
 var number_of_beats_in_round: int
 var tempo: float = 135
 var round_duration: float
@@ -36,7 +36,7 @@ func played_on_rest() -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("play"):
-		play_sound()
+		#play_sound()
 		emit_signal("play_signal",elapsed_round_time)
 
 func play_sound() -> void:
@@ -116,7 +116,7 @@ func _on_beat_signal(beat_num: int) -> void:
 func _on_round_changed(round: int) -> void:
 	print("round changed")
 	round_num += 1
-	if round_num > stage_note_arrays.size():
+	if round_num >= stage_note_arrays.size():
 		get_tree().quit()
 
 # Parses a comma-separated line of <symbol>:<duration> items.
@@ -179,10 +179,10 @@ func group_into_stages(parsed_notes: Array) -> Array[Array]:
 	for entry: Array in parsed_notes:
 		var dur: float= entry[0]
 		var typ: String = entry[1]
-
+		var stage_limit: float = number_of_bars * time_signature / 4
 		# If adding this note exceeds the stage limit (1.0),
 		# finalize current stage and start a new one.
-		if accumulated + dur > 1.0:
+		if accumulated + dur > stage_limit:
 			stages.append(current_stage.duplicate())
 			current_stage.clear()
 			accumulated = 0.0
@@ -191,7 +191,7 @@ func group_into_stages(parsed_notes: Array) -> Array[Array]:
 		accumulated += dur
 
 		# If we hit exactly 1.0, finalize the stage
-		if abs(accumulated - 1.0) < 0.0001:
+		if abs(accumulated - stage_limit) < 0.0001:
 			stages.append(current_stage.duplicate())
 			current_stage.clear()
 			accumulated = 0.0
@@ -215,4 +215,14 @@ func read_text_file(path: String) -> String:
 	return text
 
 func build_level() -> void:
-	stage_note_arrays = group_into_stages(parse_notes_text(read_text_file("res://levels/PianoBasics2_KidsMVP_OnTheRoad_Marmalade_Right.txt")))
+	stage_note_arrays = group_into_stages(parse_notes_text(read_text_file("res://levels/Badguy135.txt")))
+
+
+func _notification(what):
+	if what == NOTIFICATION_APPLICATION_FOCUS_OUT:
+		print("Game lost focus — pausing audio")
+		get_tree().paused = true
+
+	elif what == NOTIFICATION_APPLICATION_FOCUS_IN:
+		print("Game gained focus — resuming audio")
+		get_tree().paused = false

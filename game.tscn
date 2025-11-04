@@ -33,27 +33,73 @@ grow_vertical = 2
 theme = SubResource("Theme_feb5d")
 
 [node name="NoteCard1" parent="CanvasLayer" instance=ExtResource("2_e2o6t")]
+offset_left = 248.0
+offset_top = 258.0
+offset_right = 388.0
+offset_bottom = 398.0
 next_notes = Array[float]([0.25])
 
 [node name="NoteCard2" parent="CanvasLayer" instance=ExtResource("2_e2o6t")]
-offset_left = 427.0
-offset_right = 567.0
+offset_left = 417.0
+offset_top = 258.0
+offset_right = 557.0
+offset_bottom = 398.0
 notes = Array[float]([0.25])
 next_notes = Array[float]([0.125, 0.125])
 beat_num = 2
 
 [node name="NoteCard3" parent="CanvasLayer" instance=ExtResource("2_e2o6t")]
-offset_left = 618.0
-offset_right = 758.0
+offset_left = 578.0
+offset_top = 258.0
+offset_right = 718.0
+offset_bottom = 398.0
 next_notes = Array[float]([0.125])
 beat_num = 3
 
 [node name="NoteCard4" parent="CanvasLayer" instance=ExtResource("2_e2o6t")]
-offset_left = 800.0
-offset_right = 940.0
+offset_left = 752.0
+offset_top = 258.0
+offset_right = 892.0
+offset_bottom = 398.0
 notes = Array[float]([0.25])
 next_notes = Array[float]([0.125, 0.125])
 beat_num = 4
+
+[node name="NoteCard5" parent="CanvasLayer" instance=ExtResource("2_e2o6t")]
+offset_left = 252.0
+offset_top = 427.0
+offset_right = 392.0
+offset_bottom = 567.0
+notes = Array[float]([0.25])
+next_notes = Array[float]([0.125, 0.125])
+beat_num = 5
+
+[node name="NoteCard6" parent="CanvasLayer" instance=ExtResource("2_e2o6t")]
+offset_left = 414.0
+offset_top = 427.0
+offset_right = 554.0
+offset_bottom = 567.0
+notes = Array[float]([0.25])
+next_notes = Array[float]([0.125, 0.125])
+beat_num = 6
+
+[node name="NoteCard7" parent="CanvasLayer" instance=ExtResource("2_e2o6t")]
+offset_left = 577.0
+offset_top = 427.0
+offset_right = 717.0
+offset_bottom = 567.0
+notes = Array[float]([0.25])
+next_notes = Array[float]([0.125, 0.125])
+beat_num = 7
+
+[node name="NoteCard8" parent="CanvasLayer" instance=ExtResource("2_e2o6t")]
+offset_left = 745.0
+offset_top = 427.0
+offset_right = 885.0
+offset_bottom = 567.0
+notes = Array[float]([0.25])
+next_notes = Array[float]([0.125, 0.125])
+beat_num = 8
 
 [node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_feb5d")
