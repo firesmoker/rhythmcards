@@ -1,9 +1,11 @@
-[gd_scene load_steps=5 format=3 uid="uid://c21eil72ud0ue"]
+[gd_scene load_steps=7 format=3 uid="uid://c21eil72ud0ue"]
 
 [ext_resource type="Texture2D" uid="uid://bgps7v7d7tvj1" path="res://images/quarter-note2.png" id="1_t3yvt"]
 [ext_resource type="Script" uid="uid://dm7wmdgka23av" path="res://scripts/note.gd" id="2_1bnk6"]
 [ext_resource type="Texture2D" uid="uid://bko838ilhcqbr" path="res://images/eigth-note2.png" id="3_43c4j"]
 [ext_resource type="Texture2D" uid="uid://thlr6b5ptjdn" path="res://images/eigth_first.png" id="3_njo4t"]
+[ext_resource type="Texture2D" uid="uid://dsbeot86g6x4u" path="res://images/rest_quarter.png" id="5_ixjtm"]
+[ext_resource type="Texture2D" uid="uid://c538fnvwa2cu4" path="res://images/RestEighthNormalBlack.png" id="6_s1bem"]
 
 [node name="Note1" type="TextureRect"]
 modulate = Color(0, 0, 0, 1)
@@ -18,3 +20,5 @@ quarter_image = ExtResource("1_t3yvt")
 first_eigth_image = ExtResource("3_njo4t")
 second_eigth_image = ExtResource("1_t3yvt")
 single_eigth_image = ExtResource("3_43c4j")
+quarter_rest_image = ExtResource("5_ixjtm")
+eigth_rest_image = ExtResource("6_s1bem")
