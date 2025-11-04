@@ -3,7 +3,7 @@ class_name NoteCard extends Panel
 @onready var note_2: Note = $Note2
 @onready var display_note_1: Note = $NoteCardDisplay/DisplayNote1
 @onready var display_note_2: Note = $NoteCardDisplay/DisplayNote2
-
+var scrolling: bool = false
 @onready var deactivate_timer: Timer = $DeactivateTimer
 @export var display_card: bool = false
 @export var notes: Array[float]
@@ -11,6 +11,11 @@ class_name NoteCard extends Panel
 var notes_dictionary: Dictionary
 @onready var display_timer: Timer = $NoteCardDisplay/DisplayTimer
 var next_notes_dictionary: Dictionary
+var original_position: Vector2
+@onready var _3d_panel: Panel = $"3DPanel"
+@onready var note_card_display_2: Panel = $NoteCardDisplay2
+
+var time_scrolling: float = 0.01
 enum note_status_types {ACTIVE,MISSED,PLAYED,PLAYED_BAD,INACTIVE}
 #var note_timings: Array[float]
 #var notes_triggered: Array[bool]
@@ -66,13 +71,18 @@ func decide_eigths_type(dictionary: Dictionary = notes_dictionary) -> String:
 	return eighth_type
 
 func round_changed_effects(stage_index: int) -> void:
+	reset_position()
+	reset_next_notes_alpha()
+	reset_main_card_alpha()
+	reset_dummy_card_alpha()
 	display_timer.stop()
-	note_card_display.visible = false
+	note_card_display.visible = true
 	if stage_index < game.stage_note_arrays.size():
 		construct_notes_dictionary(extract_beat_notes_from_full_round(game.stage_note_arrays[stage_index]))
 		if stage_index + 1 < game.stage_note_arrays.size():
 			construct_notes_dictionary(extract_beat_notes_from_full_round(game.stage_note_arrays[stage_index + 1]),true)
 	set_notes_visibility()
+	transition_to_next_card_visual()
 	clear_note_visuals()
 	disable_deactivation_timer()
 	
@@ -174,6 +184,7 @@ func calculate_note_timings() -> void:
 		#print("for card " + str(name) + " note " + str(i) + " timing is " + str(notes_dictionary[i]["timing"]))
 
 func _ready() -> void:
+	original_position = position
 	selection_panel.visible = true
 	#next_notes = notes.duplicate()
 	active = false
@@ -186,6 +197,7 @@ func _ready() -> void:
 		game.round_changed.connect(round_changed_effects)
 		game.activate_signal.connect(toggle_by_beat)
 		game.activate_signal.connect(activate_signal_effects)
+		game.scroll.connect(start_scrolling)
 
 func start_deactivation_timer(round_beat: int,time: float) -> void:
 	if beat_num == round_beat:
@@ -212,8 +224,8 @@ func beat_signal_effects(round_beat: int, verify: bool = true) -> void:
 	selection_pulse(round_beat)
 	start_deactivation_timer(round_beat, game.one_beat_duration)
 	toggle_by_beat(round_beat, true)
-	if round_beat == beat_num:
-		transition_to_next_card_visual()
+	#if round_beat == beat_num:
+		#transition_to_next_card_visual()
 		#start_display_timer(0.5)
 
 func activate_signal_effects(round_beat: int, verify: bool = true) -> void:
@@ -261,6 +273,12 @@ func play_note_by_index(note_index: int, bad_play: bool = false) -> void:
 			notes_dictionary[note_index + 1]["status"] = note_status_types.ACTIVE
 
 func _process(delta: float) -> void:
+	#print(delta)
+	fade_next_card_notes_in()
+	if scrolling:
+		fade_main_card_out(0.03)
+		dummy_card_fade_in(0.03)
+		scroll_up(delta,game.one_beat_duration * 0.75, 178.0)
 	display_card_fade_in(delta, game.one_beat_duration)
 	selection_panel.self_modulate.a -= 0.01
 	if active:
@@ -354,10 +372,56 @@ func display_card_fade_in(delta: float, time: float) -> void:
 
 func transition_to_next_card_visual() -> void:
 	set_next_display_notes_visibility()
-	note_card_display.modulate.a = -2
+	note_card_display.modulate.a = 1
 	note_card_display.visible = true
 
 func _on_display_timer_timeout() -> void:
 	set_next_display_notes_visibility()
-	note_card_display.modulate.a = 0
+	note_card_display.modulate.a = 1
 	note_card_display.visible = true
+
+func scroll_up(delta: float, time_to_scroll: float, distance: float) -> void:
+	time_scrolling += delta
+	var weight: float = clamp(time_scrolling / time_to_scroll,0,1)
+	print(weight)
+	var target_position: Vector2 = Vector2(original_position.x,original_position.y - distance)
+	position = lerp(original_position,target_position,weight)
+	#if weight >= 1:
+		#reset_position()
+
+func start_scrolling() -> void:
+	await get_tree().create_timer(game.one_beat_duration * 0.2).timeout
+	scrolling = true
+
+func reset_position() -> void:
+	scrolling = false
+	time_scrolling = 0
+	position = original_position
+
+func reset_main_card_alpha() -> void:
+	self_modulate.a = 1
+	note_1.self_modulate.a  = 1
+	note_2.self_modulate.a  = 1
+	#selection_panel.self_modulate.a = 1
+	_3d_panel.self_modulate.a = 1
+
+func dummy_card_fade_in(rate: float = 0.01) -> void:
+	note_card_display_2.modulate.a += rate
+
+func reset_dummy_card_alpha() -> void:
+	note_card_display_2.modulate.a = 0
+	
+func reset_next_notes_alpha() -> void:
+	display_note_1.modulate.a = 0
+	display_note_2.modulate.a = 0
+
+func fade_main_card_out(rate: float = 0.01) -> void:
+	self_modulate.a -= rate
+	note_1.self_modulate.a -= rate
+	note_2.self_modulate.a -= rate
+	selection_panel.self_modulate.a -= rate
+	_3d_panel.self_modulate.a -= rate
+
+func fade_next_card_notes_in(rate: float = 0.01) -> void:
+	display_note_1.modulate.a += rate
+	display_note_2.modulate.a += rate

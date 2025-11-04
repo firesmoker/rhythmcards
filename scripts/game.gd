@@ -12,7 +12,7 @@ var last_note_card_finished: int = 0
 @export var stage_note_arrays: Array[Array]
 var beat_num: int = 1
 var time_signature: int = 4
-var number_of_bars: int = 2
+var number_of_bars: int = 1
 var number_of_beats_in_round: int
 var tempo: float = 135
 var round_duration: float
@@ -28,7 +28,7 @@ signal beat_signal
 signal play_signal
 signal activate_signal
 signal round_changed
-
+signal scroll
 
 func played_on_rest() -> void:
 	sfx_player.stream = preload("res://sfx/wrong4.wav")
@@ -111,6 +111,8 @@ func beat_counter(delta: float) -> void:
 		#print("beat_signal")
 	
 func _on_beat_signal(beat_num: int) -> void:
+	if beat_num == number_of_beats_in_round:
+		scroll_cards_up()
 	print(beat_num)
 
 func _on_round_changed(round: int) -> void:
@@ -226,3 +228,6 @@ func _notification(what):
 	elif what == NOTIFICATION_APPLICATION_FOCUS_IN:
 		print("Game gained focus — resuming audio")
 		get_tree().paused = false
+
+func scroll_cards_up() -> void:
+	emit_signal("scroll")
