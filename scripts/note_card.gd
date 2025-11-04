@@ -82,13 +82,13 @@ func extract_beat_notes_from_full_round(notes_array: Array) -> Array:
 	var previous_beats_duration: float = game.one_beat_value * (beat_num -1)
 	var previous_beats_duration_counter: float = 0
 	var current_beat_duration_counter: float = 0
-	for note: float in notes_array:
+	for note: Array in notes_array:
 		print(note)
 		if previous_beats_duration_counter < previous_beats_duration:
-			previous_beats_duration_counter += note
+			previous_beats_duration_counter += note[0]
 		elif current_beat_duration_counter < game.one_beat_value:
 			new_notes_array.append(note)
-			current_beat_duration_counter += note
+			current_beat_duration_counter += note[0]
 		else:
 			break
 	print("new note array is: " + str(new_notes_array))
@@ -100,7 +100,7 @@ func construct_notes_dictionary(note_durations_array: Array, next: bool = false)
 		notes_dictionary.clear()
 		for note in note_durations_array:
 			notes_dictionary[index] = {}
-			notes_dictionary[index]["duration"] = note
+			notes_dictionary[index]["duration"] = note[0]
 			notes_dictionary[index]["status"] = note_status_types.INACTIVE
 			if index == 0:
 				notes_dictionary[index]["game_object"] = note_1

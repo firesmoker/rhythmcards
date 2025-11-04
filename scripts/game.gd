@@ -37,8 +37,14 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func construct_dummy_level() -> void:
 	var number_of_stages: int = 10
-	var odd_array: Array = [0.25,0.25,0.125,0.125,0.125,0.125,]
-	var even_array: Array = [0.125,0.125,0.125,0.125,0.25,0.25]
+	var notes_for_odd_array: Array = [0.25,0.25,0.125,0.125,0.125,0.125,]
+	var odd_array: Array
+	for i in range(notes_for_odd_array.size()):
+		odd_array.append([notes_for_odd_array[i],"note"])
+	var notes_for_even_array: Array = [0.125,0.125,0.125,0.125,0.25,0.25]
+	var even_array: Array
+	for i in range(notes_for_even_array.size()):
+		even_array.append([notes_for_even_array[i],"note"])
 	for i in range(number_of_stages):
 		if i % 2 == 1:
 			print("odd")
