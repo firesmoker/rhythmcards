@@ -20,8 +20,8 @@ enum note_status_types {ACTIVE,MISSED,PLAYED,PLAYED_BAD,INACTIVE}
 var active: bool:
 	set(value):
 		active = value
-		if value == false:
-			start_display_timer()
+		#if value == false:
+			#start_display_timer()
 		#toggle_highlight(value)
 @export var beat_num: int = 1
 var game: Game
@@ -65,6 +65,7 @@ func decide_eigths_type(dictionary: Dictionary = notes_dictionary) -> String:
 	return eighth_type
 
 func round_changed_effects(stage_index: int) -> void:
+	display_timer.stop()
 	note_card_display.visible = false
 	if stage_index < game.stage_note_arrays.size():
 		construct_notes_dictionary(extract_beat_notes_from_full_round(game.stage_note_arrays[stage_index]))
@@ -174,18 +175,12 @@ func _ready() -> void:
 	pivot_offset.x = 0 + size.x / 2
 	pivot_offset.y = 0 + size.y / 2
 	game = find_parent("Game")
-	if game != null:
+	if game != null and not display_card:
 		game.beat_signal.connect(beat_signal_effects)
 		game.play_signal.connect(play)
-		#game.round_changed.connect(set_note_timings.bind(notes))
 		game.round_changed.connect(round_changed_effects)
-		#game.round_changed.connect(construct_notes_dictionary.bind(notes))
-		#game.round_changed.connect(disable_deactivation_timer)
-		#game.beat_signal.connect(allow_note_activation)
 		game.activate_signal.connect(toggle_by_beat)
 		game.activate_signal.connect(activate_signal_effects)
-	#construct_notes_dictionary(notes)
-	#construct_notes_dictionary(extract_beat_notes_from_full_round(game.stage_note_arrays[0]))
 
 func start_deactivation_timer(round_beat: int,time: float) -> void:
 	if beat_num == round_beat:
@@ -193,8 +188,8 @@ func start_deactivation_timer(round_beat: int,time: float) -> void:
 		await deactivate_timer.timeout
 		deactivate()
 
-func start_display_timer(time: float = 0.7) -> void:
-	display_timer.start(time)
+#func start_display_timer(time: float = game.one_beat_duration) -> void:
+	#display_timer.start(time)
 
 func deactivate() -> void:
 	for note in notes_dictionary:
@@ -212,6 +207,9 @@ func beat_signal_effects(round_beat: int, verify: bool = true) -> void:
 	selection_pulse(round_beat)
 	start_deactivation_timer(round_beat, game.one_beat_duration)
 	toggle_by_beat(round_beat, true)
+	if round_beat == beat_num:
+		transition_to_next_card_visual()
+		#start_display_timer(0.5)
 
 func activate_signal_effects(round_beat: int, verify: bool = true) -> void:
 	if round_beat == beat_num:
@@ -222,11 +220,11 @@ func play(time: float) -> void:
 	if active:
 		for i in range(notes_dictionary.size()):
 			if notes_dictionary[i]["status"] == note_status_types.ACTIVE:
-				if time >= notes_dictionary[i]["timing"] + notes_dictionary[i]["duration"] / 2:
+				if time >= notes_dictionary[i]["timing"] + notes_dictionary[i]["duration"] * 0.8:
 					play_note_by_index(i,true)
 				elif time >= notes_dictionary[i]["timing"]:
 					play_note_by_index(i)
-				elif time < notes_dictionary[i]["timing"] and time > notes_dictionary[i]["timing"] - notes_dictionary[i]["duration"] / 2:
+				elif time < notes_dictionary[i]["timing"] and time > notes_dictionary[i]["timing"] - notes_dictionary[i]["duration"] * 0.8:
 					play_note_by_index(i)
 				elif time > notes_dictionary[i]["timing"] - notes_dictionary[i]["duration"]:
 					play_note_by_index(i, true)
@@ -253,6 +251,7 @@ func play_note_by_index(note_index: int, bad_play: bool = false) -> void:
 			notes_dictionary[note_index + 1]["status"] = note_status_types.ACTIVE
 
 func _process(delta: float) -> void:
+	display_card_fade_in(delta, game.one_beat_duration)
 	selection_panel.self_modulate.a -= 0.01
 	if active:
 		#autoplay(game.elapsed_round_time)
@@ -336,10 +335,15 @@ func set_next_display_notes_visibility() -> void:
 			next_notes_dictionary[note]["game_object"].set_note(note_duration)
 		index += 1
 
-func fade_in(time: float) -> void:
-	pass
+func display_card_fade_in(delta: float, time: float) -> void:
+	note_card_display.modulate.a += delta / time
 
+func transition_to_next_card_visual() -> void:
+	set_next_display_notes_visibility()
+	note_card_display.modulate.a = -2
+	note_card_display.visible = true
 
 func _on_display_timer_timeout() -> void:
 	set_next_display_notes_visibility()
+	note_card_display.modulate.a = 0
 	note_card_display.visible = true

@@ -14,7 +14,7 @@ var beat_num: int = 1
 var time_signature: int = 4
 var number_of_bars: int = 1
 var number_of_beats_in_round: int
-var tempo: float = 60
+var tempo: float = 135
 var round_duration: float
 var elapsed_round_time: float = 0
 var round_num: float:
@@ -50,7 +50,7 @@ func construct_dummy_level() -> void:
 
 func _ready() -> void:
 	construct_dummy_level()
-	one_beat_duration = tempo / 135
+	one_beat_duration = 60 / tempo
 	#print(one_beat_duration)
 	number_of_beats_in_round = time_signature * number_of_bars
 	round_duration = number_of_beats_in_round * one_beat_duration
@@ -91,23 +91,6 @@ func beat_counter(delta: float) -> void:
 	
 func _on_beat_signal(beat_num: int) -> void:
 	print(beat_num)
-#
-#func clear_cards_visuals() -> void:
-	#for card in note_cards:
-		#card.modulate = Color.WHITE
-#
-#func higlight_card(num: int) -> void:
-	#note_cards[num].modulate = Color.BLACK
-#
-#func choose_max_active_card() -> void:
-	#pass
-#
-#func enable_card(card_num: int) -> void:
-	#if card_num in note_cards:
-		#note_cards[card_num].active = true
-	#else:
-		#push_error("no card with num " + str(card_num))
-
 
 func _on_round_changed(round: int) -> void:
 	round_num += 1
