@@ -69,7 +69,8 @@ func construct_dummy_level() -> void:
 	#print(stage_note_arrays)
 
 func _ready() -> void:
-	construct_dummy_level()
+	build_level()
+	#construct_dummy_level()
 	one_beat_duration = 60 / tempo
 	#print(one_beat_duration)
 	number_of_beats_in_round = time_signature * number_of_bars
@@ -113,4 +114,105 @@ func _on_beat_signal(beat_num: int) -> void:
 	print(beat_num)
 
 func _on_round_changed(round: int) -> void:
+	print("round changed")
 	round_num += 1
+	if round_num > stage_note_arrays.size():
+		get_tree().quit()
+
+# Parses a comma-separated line of <symbol>:<duration> items.
+# Example input: "-:1/4, C4:1/8, E3:1/2"
+# Output: [[0.25, "rest"], [0.125, "note"], [0.5, "note"]]
+# Parses a block of musical text into [[duration, "note"|"rest"], ...]
+# Ignores extra whitespace, newlines, and symbols like "%4", "%3", etc.
+func parse_notes_text(text: String) -> Array:
+	var result: Array = []
+
+	# Replace line breaks with spaces and remove '%' markers and trailing digits
+	var cleaned := text.replace("\n", " ").replace("\r", "")
+	cleaned = cleaned.replace("\t", " ")
+	
+	# Remove all occurrences of '%<number>'
+	var regex := RegEx.new()
+	regex.compile("%\\d+")
+	cleaned = regex.sub(cleaned, "", true)
+	
+	# Split the text by spaces and commas into tokens like "C4:1/4" or "-:1"
+	for token in cleaned.split(" "):
+		var chunk := token.strip_edges()
+		if chunk.is_empty():
+			continue
+
+		var parts := chunk.split(":")
+		if parts.size() != 2:
+			continue
+
+		var symbol := parts[0].strip_edges()
+		var dur_str := parts[1].strip_edges()
+
+		var dur := _parse_fraction_to_float(dur_str)
+		if dur < 0.0:
+			continue
+
+		var note_type := "rest" if symbol == "-" else "note"
+		result.append([dur, note_type])
+	print(result)
+	return result
+
+
+# Converts strings like "1/4" or "0.25" or "1" to float duration.
+func _parse_fraction_to_float(s: String) -> float:
+	var parts := s.split("/")
+	if parts.size() == 2 and parts[0].is_valid_int() and parts[1].is_valid_int():
+		var num := int(parts[0])
+		var den := int(parts[1])
+		if den != 0:
+			return float(num) / float(den)
+	if s.is_valid_float():
+		return float(s)
+	return -1.0
+
+func group_into_stages(parsed_notes: Array) -> Array[Array]:
+	var stages: Array[Array] = []
+	var current_stage: Array = []
+	var accumulated := 0.0
+
+	for entry: Array in parsed_notes:
+		var dur: float= entry[0]
+		var typ: String = entry[1]
+
+		# If adding this note exceeds the stage limit (1.0),
+		# finalize current stage and start a new one.
+		if accumulated + dur > 1.0:
+			stages.append(current_stage.duplicate())
+			current_stage.clear()
+			accumulated = 0.0
+
+		current_stage.append(entry)
+		accumulated += dur
+
+		# If we hit exactly 1.0, finalize the stage
+		if abs(accumulated - 1.0) < 0.0001:
+			stages.append(current_stage.duplicate())
+			current_stage.clear()
+			accumulated = 0.0
+
+	# If anything remains at the end, include it
+	if current_stage.size() > 0:
+		stages.append(current_stage)
+	print(stages)
+	return stages
+
+# Reads all text from a given file path and returns it as a String.
+# Example: var contents = read_text_file("res://notes.txt")
+func read_text_file(path: String) -> String:
+	var file := FileAccess.open(path, FileAccess.READ)
+	if file == null:
+		push_error("Failed to open file: %s" % path)
+		return ""
+	
+	var text := file.get_as_text()
+	file.close()
+	return text
+
+func build_level() -> void:
+	stage_note_arrays = group_into_stages(parse_notes_text(read_text_file("res://levels/PianoBasics2_KidsMVP_OnTheRoad_Marmalade_Right.txt")))
