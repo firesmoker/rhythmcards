@@ -251,8 +251,8 @@ func play(time: float) -> void:
 					game.play_sound()
 				elif notes_dictionary[i]["type"] == "rest":
 					game.played_on_rest()
-				else:
-					return
+				
+				return
 		update_note_visuals()
 
 func miss_note_by_index(note_index: int) -> void:
@@ -390,7 +390,7 @@ func scroll_up(delta: float, time_to_scroll: float, distance: float) -> void:
 		#reset_position()
 
 func start_scrolling() -> void:
-	await get_tree().create_timer(game.one_beat_duration * 0.2).timeout
+	await get_tree().create_timer(game.one_beat_duration * 0.15).timeout
 	scrolling = true
 
 func reset_position() -> void:

@@ -7,7 +7,7 @@ var one_beat_value: float = 0.25
 var one_beat_duration_counter: float = 0
 
 var pre_beat_duration_counter: float = 0
-#var pre_beat_num: int = 1
+
 var last_note_card_finished: int = 0
 @export var stage_note_arrays: Array[Array]
 var beat_num: int = 1
@@ -217,7 +217,7 @@ func read_text_file(path: String) -> String:
 	return text
 
 func build_level() -> void:
-	stage_note_arrays = group_into_stages(parse_notes_text(read_text_file("res://levels/Badguy135.txt")))
+	stage_note_arrays = group_into_stages(parse_notes_text(read_text_file("res://levels/Badguy135_easy.txt")))
 
 
 func _notification(what):

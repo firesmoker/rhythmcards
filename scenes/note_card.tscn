@@ -111,8 +111,7 @@ theme = ExtResource("1_fmbix")
 metadata/_edit_lock_ = true
 
 [node name="NoteCardDisplay2" type="Panel" parent="."]
-modulate = Color(1, 1, 1, 0)
-self_modulate = Color(0.811765, 0.811765, 0.811765, 1)
+self_modulate = Color(0.811127, 0.811127, 0.811127, 1)
 z_index = 10
 layout_mode = 1
 anchors_preset = 15
