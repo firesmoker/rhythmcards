@@ -1,13 +1,15 @@
 class_name Game extends Control
 @onready var music_player: AudioStreamPlayer = $MusicPlayer
 @onready var sfx_player: AudioStreamPlayer = $SFXPlayer
+@onready var points_label: Label = $HUD/PointsLabel
+@onready var streak_label: Label = $HUD/StreakLabel
 
 var one_beat_duration: float = 1
 var one_beat_value: float = 0.25
 var one_beat_duration_counter: float = 0
-
+var points: int = 0
 var pre_beat_duration_counter: float = 0
-
+var streak_counter: int = 0
 var last_note_card_finished: int = 0
 @export var stage_note_arrays: Array[Array]
 var beat_num: int = 1
@@ -33,6 +35,7 @@ signal scroll
 func played_on_rest() -> void:
 	sfx_player.stream = preload("res://sfx/wrong4.wav")
 	sfx_player.play()
+	reset_streak_counter()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("play"):
@@ -231,3 +234,15 @@ func _notification(what):
 
 func scroll_cards_up() -> void:
 	emit_signal("scroll")
+
+func update_score(points_change: float) -> void:
+	points += points_change
+	points_label.text = "Score: " + str(points)
+
+func update_streak_counter(num: int = 1) -> void:
+	streak_counter += num
+	streak_label.text = "Streak: " + str(streak_counter)
+
+func reset_streak_counter() -> void:
+	streak_counter = 0
+	streak_label.text = "Streak: " + str(streak_counter)

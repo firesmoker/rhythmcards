@@ -14,6 +14,7 @@ var next_notes_dictionary: Dictionary
 var original_position: Vector2
 @onready var _3d_panel: Panel = $"3DPanel"
 @onready var note_card_display_2: Panel = $NoteCardDisplay2
+@onready var combo_label: Label = $"../../HUD/ComboLabel"
 
 var time_scrolling: float = 0.01
 enum note_status_types {ACTIVE,MISSED,PLAYED,PLAYED_BAD,INACTIVE}
@@ -78,6 +79,8 @@ func round_changed_effects(stage_index: int) -> void:
 	display_timer.stop()
 	note_card_display.visible = true
 	if stage_index < game.stage_note_arrays.size():
+		if active:
+			deactivate()
 		construct_notes_dictionary(extract_beat_notes_from_full_round(game.stage_note_arrays[stage_index]))
 		if stage_index + 1 < game.stage_note_arrays.size():
 			construct_notes_dictionary(extract_beat_notes_from_full_round(game.stage_note_arrays[stage_index + 1]),true)
@@ -217,6 +220,8 @@ func deactivate() -> void:
 				pass
 			_:
 				notes_dictionary[note]["status"] = note_status_types.MISSED
+				if notes_dictionary[note]["type"] == "note":
+					game.reset_streak_counter()
 	update_note_visuals()
 	active = false
 
@@ -251,13 +256,12 @@ func play(time: float) -> void:
 					game.play_sound()
 				elif notes_dictionary[i]["type"] == "rest":
 					game.played_on_rest()
-				
 				return
 		update_note_visuals()
 
 func miss_note_by_index(note_index: int) -> void:
 	if note_index in notes_dictionary:
-		
+		game.reset_streak_counter()
 		notes_dictionary[note_index]["status"] = note_status_types.MISSED
 		if note_index + 1 in notes_dictionary:
 			notes_dictionary[note_index + 1]["status"] = note_status_types.ACTIVE
@@ -266,8 +270,12 @@ func play_note_by_index(note_index: int, bad_play: bool = false) -> void:
 	if note_index in notes_dictionary:
 		if notes_dictionary[note_index]["status"] == note_status_types.ACTIVE:
 			if bad_play:
+				game.update_score(5)
+				game.update_streak_counter()
 				notes_dictionary[note_index]["status"] = note_status_types.PLAYED_BAD
 			else:
+				game.update_score(10)
+				game.update_streak_counter()
 				notes_dictionary[note_index]["status"] = note_status_types.PLAYED
 		if note_index + 1 in notes_dictionary:
 			notes_dictionary[note_index + 1]["status"] = note_status_types.ACTIVE

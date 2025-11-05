@@ -71,5 +71,23 @@ stream = ExtResource("3_feb5d")
 [node name="SFXPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("4_fc0e3")
 
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="PointsLabel" type="Label" parent="HUD"]
+offset_left = 27.0
+offset_top = 17.0
+offset_right = 286.0
+offset_bottom = 107.0
+theme_override_font_sizes/font_size = 60
+text = "Score:"
+
+[node name="StreakLabel" type="Label" parent="HUD"]
+offset_left = 786.0
+offset_top = 19.0
+offset_right = 1045.0
+offset_bottom = 109.0
+theme_override_font_sizes/font_size = 60
+text = "Streak: 0"
+
 [connection signal="beat_signal" from="." to="." method="_on_beat_signal"]
 [connection signal="round_changed" from="." to="." method="_on_round_changed"]
