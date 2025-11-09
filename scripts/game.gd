@@ -14,7 +14,7 @@ var last_note_card_finished: int = 0
 @export var stage_note_arrays: Array[Array]
 var beat_num: int = 1
 var time_signature: int = 4
-var number_of_bars: int = 1
+var number_of_bars: int = 2
 var number_of_beats_in_round: int
 var tempo: float = 135
 var round_duration: float

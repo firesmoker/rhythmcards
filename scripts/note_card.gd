@@ -5,16 +5,15 @@ class_name NoteCard extends Panel
 @onready var display_note_2: Note = $NoteCardDisplay/DisplayNote2
 var scrolling: bool = false
 @onready var deactivate_timer: Timer = $DeactivateTimer
-@export var display_card: bool = false
+#@export var display_card: bool = false
 @export var notes: Array[float]
 @export var next_notes: Array[float]
 var notes_dictionary: Dictionary
-@onready var display_timer: Timer = $NoteCardDisplay/DisplayTimer
+#@onready var display_timer: Timer = $NoteCardDisplay/DisplayTimer
 var next_notes_dictionary: Dictionary
 var original_position: Vector2
 @onready var _3d_panel: Panel = $"3DPanel"
 @onready var note_card_display_2: Panel = $NoteCardDisplay2
-@onready var combo_label: Label = $"../../HUD/ComboLabel"
 
 var time_scrolling: float = 0.01
 enum note_status_types {ACTIVE,MISSED,PLAYED,PLAYED_BAD,INACTIVE}
@@ -76,8 +75,8 @@ func round_changed_effects(stage_index: int) -> void:
 	reset_next_notes_alpha()
 	reset_main_card_alpha()
 	reset_dummy_card_alpha()
-	display_timer.stop()
-	note_card_display.visible = true
+	#display_timer.stop()
+	#note_card_display.visible = true
 	if stage_index < game.stage_note_arrays.size():
 		if active:
 			deactivate()
@@ -187,6 +186,7 @@ func calculate_note_timings() -> void:
 		#print("for card " + str(name) + " note " + str(i) + " timing is " + str(notes_dictionary[i]["timing"]))
 
 func _ready() -> void:
+	note_card_display.visible = true
 	original_position = position
 	selection_panel.visible = true
 	#next_notes = notes.duplicate()
@@ -194,7 +194,7 @@ func _ready() -> void:
 	pivot_offset.x = 0 + size.x / 2
 	pivot_offset.y = 0 + size.y / 2
 	game = find_parent("Game")
-	if game != null and not display_card:
+	if game != null:
 		game.beat_signal.connect(beat_signal_effects)
 		game.play_signal.connect(play)
 		game.round_changed.connect(round_changed_effects)
@@ -242,7 +242,7 @@ func play(time: float) -> void:
 	if active:
 		for i in range(notes_dictionary.size()):
 			if notes_dictionary[i]["status"] == note_status_types.ACTIVE:
-				if time >= notes_dictionary[i]["timing"] + notes_dictionary[i]["duration"] * 0.8:
+				if time >= notes_dictionary[i]["timing"] + notes_dictionary[i]["duration"]:
 					play_note_by_index(i,true)
 				elif time >= notes_dictionary[i]["timing"]:
 					play_note_by_index(i)
@@ -284,9 +284,9 @@ func _process(delta: float) -> void:
 	#print(delta)
 	fade_next_card_notes_in()
 	if scrolling:
-		fade_main_card_out(0.03)
+		fade_main_card_out(0.06)
 		dummy_card_fade_in(0.03)
-		scroll_up(delta,game.one_beat_duration * 0.75, 178.0)
+		scroll_up(delta,game.one_beat_duration * 0.75, 365.0)
 	display_card_fade_in(delta, game.one_beat_duration)
 	selection_panel.self_modulate.a -= 0.01
 	if active:
@@ -380,13 +380,13 @@ func display_card_fade_in(delta: float, time: float) -> void:
 
 func transition_to_next_card_visual() -> void:
 	set_next_display_notes_visibility()
-	note_card_display.modulate.a = 1
-	note_card_display.visible = true
+	#note_card_display.modulate.a = 1
+	#note_card_display.visible = true
 
-func _on_display_timer_timeout() -> void:
-	set_next_display_notes_visibility()
-	note_card_display.modulate.a = 1
-	note_card_display.visible = true
+#func _on_display_timer_timeout() -> void:
+	#set_next_display_notes_visibility()
+	#note_card_display.modulate.a = 1
+	#note_card_display.visible = true
 
 func scroll_up(delta: float, time_to_scroll: float, distance: float) -> void:
 	time_scrolling += delta
@@ -402,6 +402,7 @@ func start_scrolling() -> void:
 	scrolling = true
 
 func reset_position() -> void:
+	note_card_display.modulate.a = 0.01
 	scrolling = false
 	time_scrolling = 0
 	position = original_position

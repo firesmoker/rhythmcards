@@ -28,6 +28,7 @@ offset_bottom = 124.0
 [node name="DeactivateTimer" type="Timer" parent="."]
 
 [node name="SelectionPanel" type="Panel" parent="."]
+visible = false
 modulate = Color(0.112037, 0.834811, 0.835308, 1)
 self_modulate = Color(1, 1, 1, 0)
 z_index = -1
@@ -68,8 +69,8 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = 178.0
-offset_bottom = 178.0
+offset_top = 365.0
+offset_bottom = 365.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_fmbix")
@@ -111,6 +112,7 @@ theme = ExtResource("1_fmbix")
 metadata/_edit_lock_ = true
 
 [node name="NoteCardDisplay2" type="Panel" parent="."]
+visible = false
 self_modulate = Color(0.811127, 0.811127, 0.811127, 1)
 z_index = 10
 layout_mode = 1

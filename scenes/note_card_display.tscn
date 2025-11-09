@@ -4,5 +4,5 @@
 [ext_resource type="Script" uid="uid://dt4wfp0ccf6pe" path="res://scripts/NoteCardDisplay.gd" id="2_c4yf8"]
 
 [node name="NoteCardDisplay" instance=ExtResource("1_d5lta")]
+z_index = -1
 script = ExtResource("2_c4yf8")
-display_card = true
