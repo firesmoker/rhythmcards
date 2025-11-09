@@ -312,11 +312,12 @@ func handle_deactivate_and_allow_next_card() -> void:
 
 func update_when_all_notes_finished() -> void:
 	for note in notes_dictionary:
-		match notes_dictionary[note]["status"]:
-			note_status_types.INACTIVE:
-				return
-			note_status_types.ACTIVE:
-				return
+		if notes_dictionary[note]["type"] == "note":
+			match notes_dictionary[note]["status"]:
+				note_status_types.INACTIVE:
+					return
+				note_status_types.ACTIVE:
+					return
 	game.last_note_card_finished = beat_num
 	#print("last note card finished in game: " + str(game.last_note_card_finished))
 
