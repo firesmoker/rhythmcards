@@ -241,6 +241,9 @@ func activate_signal_effects(round_beat: int, verify: bool = true) -> void:
 func play(time: float) -> void:
 	if active:
 		for i in range(notes_dictionary.size()):
+			if notes_dictionary[i]["type"] == "rest" and i + 1 in notes_dictionary:
+					notes_dictionary[i + 1]["status"] = note_status_types.ACTIVE
+					i = i + 1
 			var d: float = notes_dictionary[i]["duration"]
 			var t: float = notes_dictionary[i]["timing"]
 			if notes_dictionary[i]["status"] == note_status_types.ACTIVE:
