@@ -244,7 +244,7 @@ func play(time: float) -> void:
 			var d: float = notes_dictionary[i]["duration"]
 			var t: float = notes_dictionary[i]["timing"]
 			if notes_dictionary[i]["status"] == note_status_types.ACTIVE:
-				if time >= t + d * (1-d) + 0.25 - clamp(d,0,0.25):
+				if time >= t + d * (1-d):
 					play_note_by_index(i,true)
 				elif time >= t:
 					play_note_by_index(i)

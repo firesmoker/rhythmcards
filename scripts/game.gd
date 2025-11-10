@@ -3,6 +3,7 @@ class_name Game extends Control
 @onready var sfx_player: AudioStreamPlayer = $SFXPlayer
 @onready var points_label: Label = $HUD/PointsLabel
 @onready var streak_label: Label = $HUD/StreakLabel
+@onready var metronome: AudioStreamPlayer = $Metronome
 
 var one_beat_duration: float = 1
 var one_beat_value: float = 0.25
@@ -22,7 +23,7 @@ var elapsed_round_time: float = 0
 var round_num: float:
 	set(value):
 		round_num = value
-		if not music_player.playing and round_num >= 0:
+		if round_num == 0:
 			music_player.play(round_num*round_duration)
 #@export var note_cards: Array[Panel]
 #@onready var note_card_1: Panel = $CanvasLayer/NoteCard1
@@ -79,17 +80,21 @@ func _ready() -> void:
 	number_of_beats_in_round = time_signature * number_of_bars
 	round_duration = number_of_beats_in_round * one_beat_duration
 	round_num = -1
-	emit_signal("round_changed",0)
-	emit_signal("beat_signal",beat_num)
+	#emit_signal("round_changed",0)
+	#emit_signal("beat_signal",beat_num)
 
 func _process(delta: float) -> void:
-	elapsed_round_time += delta
+	if music_player.playing:
+		elapsed_round_time += delta
 	#print(elapsed_round_time)
 	#pre_beat_counter(delta)
-	beat_counter(delta)
+		beat_counter(delta)
 	if last_note_card_finished == beat_num:
 		#print("ready to pass to next card: " + str(last_note_card_finished + 1))
 		emit_signal("activate_signal",last_note_card_finished + 1,false)
+	if round_num == -1:
+		emit_signal("round_changed",0)
+		emit_signal("beat_signal",beat_num)
 
 #func pre_beat_counter(delta: float) -> void:
 	#pre_beat_duration_counter += delta
@@ -114,12 +119,14 @@ func beat_counter(delta: float) -> void:
 		#print("beat_signal")
 	
 func _on_beat_signal(beat_num: int) -> void:
+	#metronome.play()
 	if beat_num == number_of_beats_in_round:
 		scroll_cards_up()
 	print(beat_num)
 
 func _on_round_changed(round: int) -> void:
 	print("round changed")
+	one_beat_duration_counter = 0
 	round_num += 1
 	if round_num >= stage_note_arrays.size():
 		get_tree().quit()
