@@ -16,7 +16,7 @@ var beat_num: int = 1
 var time_signature: int = 4
 var number_of_bars: int = 2
 var number_of_beats_in_round: int
-var tempo: float = 135
+var tempo: float = 98
 var round_duration: float
 var elapsed_round_time: float = 0
 var round_num: float:
@@ -220,7 +220,7 @@ func read_text_file(path: String) -> String:
 	return text
 
 func build_level() -> void:
-	stage_note_arrays = group_into_stages(parse_notes_text(read_text_file("res://levels/Badguy135_easy.txt")))
+	stage_note_arrays = group_into_stages(parse_notes_text(read_text_file("res://levels/Levitating_98_easy.txt")))
 
 
 func _notification(what):

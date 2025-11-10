@@ -241,14 +241,16 @@ func activate_signal_effects(round_beat: int, verify: bool = true) -> void:
 func play(time: float) -> void:
 	if active:
 		for i in range(notes_dictionary.size()):
+			var d: float = notes_dictionary[i]["duration"]
+			var t: float = notes_dictionary[i]["timing"]
 			if notes_dictionary[i]["status"] == note_status_types.ACTIVE:
-				if time >= notes_dictionary[i]["timing"] + notes_dictionary[i]["duration"]:
+				if time >= t + d * (1-d) + 0.25 - clamp(d,0,0.25):
 					play_note_by_index(i,true)
-				elif time >= notes_dictionary[i]["timing"]:
+				elif time >= t:
 					play_note_by_index(i)
-				elif time < notes_dictionary[i]["timing"] and time > notes_dictionary[i]["timing"] - notes_dictionary[i]["duration"] * 0.8:
+				elif time < t and time > t - d:
 					play_note_by_index(i)
-				elif time > notes_dictionary[i]["timing"] - notes_dictionary[i]["duration"]:
+				elif time > t - d * (1-d):
 					play_note_by_index(i, true)
 				else:
 					miss_note_by_index(i )
@@ -288,13 +290,13 @@ func _process(delta: float) -> void:
 		dummy_card_fade_in(0.03)
 		scroll_up(delta,game.one_beat_duration * 0.75, 365.0)
 	display_card_fade_in(delta, game.one_beat_duration)
-	selection_panel.self_modulate.a -= 0.01
+	selection_panel.self_modulate.a -= 0.015
 	if active:
 		#autoplay(game.elapsed_round_time)
 		#play(game.elapsed_round_time)
 		handle_deactivate_and_allow_next_card()
 	update_note_visuals()
-
+ 
 func toggle_by_beat(round_beat: int, verify: bool = true) -> void:
 	if verify:
 		if game.beat_num != round_beat:

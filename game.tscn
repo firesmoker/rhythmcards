@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://j3wnbwulmccx" path="res://scripts/game.gd" id="1_80nbo"]
 [ext_resource type="PackedScene" uid="uid://degsnrielqyat" path="res://scenes/note_card.tscn" id="2_e2o6t"]
-[ext_resource type="AudioStream" uid="uid://dn6wwh6tih3ey" path="res://music/badguy_135_full.wav" id="3_feb5d"]
+[ext_resource type="AudioStream" uid="uid://0d2rkcyxof7r" path="res://music/Levitating_DuaLipa_DMinor_98bpm_Touch-1.wav" id="3_fc0e3"]
 [ext_resource type="AudioStream" uid="uid://2jnksfmcxlo2" path="res://sfx/clap.wav" id="4_fc0e3"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e2o6t"]
@@ -42,9 +42,6 @@ next_notes = Array[float]([0.25])
 [node name="NoteCardDisplay" parent="CanvasLayer/NoteCard1" index="5"]
 visible = false
 
-[node name="NoteCardDisplay2" parent="CanvasLayer/NoteCard1" index="6"]
-visible = false
-
 [node name="NoteCard2" parent="CanvasLayer" instance=ExtResource("2_e2o6t")]
 offset_left = 417.0
 offset_top = 155.0
@@ -55,9 +52,6 @@ next_notes = Array[float]([0.125, 0.125])
 beat_num = 2
 
 [node name="NoteCardDisplay" parent="CanvasLayer/NoteCard2" index="5"]
-visible = false
-
-[node name="NoteCardDisplay2" parent="CanvasLayer/NoteCard2" index="6"]
 visible = false
 
 [node name="NoteCard3" parent="CanvasLayer" instance=ExtResource("2_e2o6t")]
@@ -71,9 +65,6 @@ beat_num = 3
 [node name="NoteCardDisplay" parent="CanvasLayer/NoteCard3" index="5"]
 visible = false
 
-[node name="NoteCardDisplay2" parent="CanvasLayer/NoteCard3" index="6"]
-visible = false
-
 [node name="NoteCard4" parent="CanvasLayer" instance=ExtResource("2_e2o6t")]
 offset_left = 752.0
 offset_top = 155.0
@@ -84,9 +75,6 @@ next_notes = Array[float]([0.125, 0.125])
 beat_num = 4
 
 [node name="NoteCardDisplay" parent="CanvasLayer/NoteCard4" index="5"]
-visible = false
-
-[node name="NoteCardDisplay2" parent="CanvasLayer/NoteCard4" index="6"]
 visible = false
 
 [node name="NoteCard5" parent="CanvasLayer" instance=ExtResource("2_e2o6t")]
@@ -124,7 +112,7 @@ next_notes = Array[float]([0.125, 0.125])
 beat_num = 8
 
 [node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("3_feb5d")
+stream = ExtResource("3_fc0e3")
 
 [node name="SFXPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("4_fc0e3")
