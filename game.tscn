@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://j3wnbwulmccx" path="res://scripts/game.gd" id="1_80nbo"]
 [ext_resource type="PackedScene" uid="uid://degsnrielqyat" path="res://scenes/note_card.tscn" id="2_e2o6t"]
-[ext_resource type="AudioStream" uid="uid://0d2rkcyxof7r" path="res://music/Levitating_DuaLipa_DMinor_98bpm_Touch-1.wav" id="3_fc0e3"]
+[ext_resource type="AudioStream" uid="uid://cvjms57u65gl4" path="res://music/test8.wav" id="3_fc0e3"]
 [ext_resource type="AudioStream" uid="uid://2jnksfmcxlo2" path="res://sfx/clap.wav" id="4_fc0e3"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e2o6t"]
@@ -116,10 +116,6 @@ stream = ExtResource("3_fc0e3")
 
 [node name="SFXPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("4_fc0e3")
-
-[node name="Metronome" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("4_fc0e3")
-pitch_scale = 0.49
 
 [node name="HUD" type="CanvasLayer" parent="."]
 

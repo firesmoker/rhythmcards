@@ -86,7 +86,7 @@ func round_changed_effects(stage_index: int) -> void:
 	set_notes_visibility()
 	transition_to_next_card_visual()
 	clear_note_visuals()
-	disable_deactivation_timer()
+	disable_deactivation_timer()	
 	
 
 func disable_deactivation_timer() -> void:

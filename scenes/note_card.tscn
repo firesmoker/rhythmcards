@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://degsnrielqyat"]
 
 [ext_resource type="Script" uid="uid://c8pcuirbyobp8" path="res://scripts/note_card.gd" id="1_43uvi"]
-[ext_resource type="Theme" uid="uid://b33ea2uo4cl6x" path="res://panel1.tres" id="1_fmbix"]
+[ext_resource type="Theme" uid="uid://b33ea2uo4cl6x" path="res://panel_theme.tres" id="1_fmbix"]
 [ext_resource type="PackedScene" uid="uid://c21eil72ud0ue" path="res://scenes/note.tscn" id="2_1ac85"]
 
 [node name="NoteCard1" type="Panel"]

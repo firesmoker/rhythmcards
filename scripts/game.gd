@@ -1,9 +1,9 @@
 class_name Game extends Control
+
 @onready var music_player: AudioStreamPlayer = $MusicPlayer
 @onready var sfx_player: AudioStreamPlayer = $SFXPlayer
 @onready var points_label: Label = $HUD/PointsLabel
 @onready var streak_label: Label = $HUD/StreakLabel
-@onready var metronome: AudioStreamPlayer = $Metronome
 
 var one_beat_duration: float = 1
 var one_beat_value: float = 0.25
@@ -17,7 +17,7 @@ var beat_num: int = 1
 var time_signature: int = 4
 var number_of_bars: int = 2
 var number_of_beats_in_round: int
-var tempo: float = 98
+var tempo: float = 95
 var round_duration: float
 var elapsed_round_time: float = 0
 var round_num: float:
@@ -40,8 +40,12 @@ func played_on_rest() -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("play"):
-		#play_sound()
-		emit_signal("play_signal",elapsed_round_time)
+		if beat_num < 0:
+			pass
+		else:
+			#play_sound()
+			emit_signal("play_signal",elapsed_round_time)
+		
 
 func play_sound() -> void:
 	sfx_player.stream = preload("res://sfx/clap.wav")
@@ -128,6 +132,7 @@ func _on_round_changed(round: int) -> void:
 	print("round changed")
 	one_beat_duration_counter = 0
 	round_num += 1
+	emit_signal("play_signal",0)
 	if round_num >= stage_note_arrays.size():
 		get_tree().quit()
 
@@ -227,7 +232,7 @@ func read_text_file(path: String) -> String:
 	return text
 
 func build_level() -> void:
-	stage_note_arrays = group_into_stages(parse_notes_text(read_text_file("res://levels/Levitating_98_easy.txt")))
+	stage_note_arrays = group_into_stages(parse_notes_text(read_text_file("res://levels/test8.txt")))
 
 
 func _notification(what):

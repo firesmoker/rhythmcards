@@ -1,0 +1,124 @@
+[gd_scene load_steps=5 format=3 uid="uid://b54oucc64hobm"]
+
+[ext_resource type="Theme" uid="uid://cepfdjvip3jem" path="res://background_theme.tres" id="1_gsw8x"]
+[ext_resource type="Theme" uid="uid://b33ea2uo4cl6x" path="res://panel_theme.tres" id="2_jkhwn"]
+[ext_resource type="PackedScene" uid="uid://c21eil72ud0ue" path="res://scenes/note.tscn" id="3_tij55"]
+[ext_resource type="Theme" uid="uid://cwb1j1w8qk8ij" path="res://button_theme.tres" id="4_jkhwn"]
+
+[node name="IntroScene" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="Panel" parent="."]
+z_index = -10
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_gsw8x")
+
+[node name="NoteCard1" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -70.0
+offset_top = -70.0
+offset_right = 70.0
+offset_bottom = 70.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_jkhwn")
+
+[node name="Note1" parent="NoteCard1" instance=ExtResource("3_tij55")]
+layout_mode = 1
+offset_left = 17.0
+offset_top = 9.0
+offset_right = 54.0
+offset_bottom = 124.0
+duration = "eigth-first"
+
+[node name="Note2" parent="NoteCard1" instance=ExtResource("3_tij55")]
+layout_mode = 1
+offset_left = 78.0
+offset_top = 9.0
+offset_right = 115.0
+offset_bottom = 124.0
+duration = "eigth-second"
+
+[node name="DeactivateTimer" type="Timer" parent="NoteCard1"]
+
+[node name="SelectionPanel" type="Panel" parent="NoteCard1"]
+visible = false
+modulate = Color(0.112037, 0.834811, 0.835308, 1)
+self_modulate = Color(1, 1, 1, 0)
+z_index = -1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -82.0
+offset_top = -79.0
+offset_right = 80.0
+offset_bottom = 84.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_jkhwn")
+
+[node name="3DPanel" type="Panel" parent="NoteCard1"]
+self_modulate = Color(0.80687, 0.80687, 0.80687, 1)
+z_index = -1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -72.0
+offset_top = -68.0
+offset_right = 70.0
+offset_bottom = 75.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_jkhwn")
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -264.0
+offset_top = -148.0
+offset_right = 264.0
+offset_bottom = -36.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("4_jkhwn")
+theme_override_font_sizes/font_size = 80
+text = "Got it"
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -319.0
+offset_right = 319.0
+offset_bottom = 126.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 50
+text = "These are two eigth-notes"
+horizontal_alignment = 1
+vertical_alignment = 1
