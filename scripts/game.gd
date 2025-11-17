@@ -5,6 +5,8 @@ class_name Game extends Control
 @onready var points_label: Label = $HUD/PointsLabel
 @onready var streak_label: Label = $HUD/StreakLabel
 
+var delayed_play_allowed: bool = false
+var delayed_play_in_progress: bool = false
 var one_beat_duration: float = 1
 var one_beat_value: float = 0.25
 var one_beat_duration_counter: float = 0
@@ -40,11 +42,17 @@ func played_on_rest() -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("play"):
-		if beat_num < 0:
-			pass
+		if delayed_play_allowed:
+			play_sound()
+			print("calling for delayed play")
+			delayed_play_in_progress = true
 		else:
-			#play_sound()
-			emit_signal("play_signal",elapsed_round_time)
+			print("play_signal, beat_num is: " + str(beat_num))
+			if beat_num < 0:
+				pass
+			else:
+				#play_sound()
+				emit_signal("play_signal",elapsed_round_time)
 		
 
 func play_sound() -> void:
@@ -69,10 +77,10 @@ func construct_dummy_level() -> void:
 			even_array.append([notes_for_even_array[i],"note"])
 	for i in range(number_of_stages):
 		if i % 2 == 1:
-			print("odd")
+			#print("odd")
 			stage_note_arrays.append(odd_array.duplicate())
 		else:
-			print("even")
+			#print("even")
 			stage_note_arrays.append(even_array.duplicate())
 	#print(stage_note_arrays)
 
@@ -110,10 +118,16 @@ func _process(delta: float) -> void:
 			#elapsed_round_time = 0
 
 func beat_counter(delta: float) -> void:
+	if beat_num == 1 and delayed_play_in_progress:
+		print("executing delayed play")
+		emit_signal("play_signal",0)
+		allow_delayed_play(false)
 	one_beat_duration_counter += delta
 	if one_beat_duration_counter >= one_beat_duration:
 		beat_num += 1
 		one_beat_duration_counter -= one_beat_duration
+		if beat_num == number_of_beats_in_round:
+			allow_delayed_play()
 		if beat_num > number_of_beats_in_round:
 			beat_num = 1
 			elapsed_round_time = 0
@@ -126,13 +140,19 @@ func _on_beat_signal(beat_num: int) -> void:
 	#metronome.play()
 	if beat_num == number_of_beats_in_round:
 		scroll_cards_up()
-	print(beat_num)
+	#print(beat_num)
+
+func allow_delayed_play(toggle: bool = true) -> void:
+	print("delayed play allowed?: " + str(toggle))
+	delayed_play_allowed = toggle
+	if toggle == false:
+		delayed_play_in_progress = false
 
 func _on_round_changed(round: int) -> void:
-	print("round changed")
+	#print("round changed")
 	one_beat_duration_counter = 0
 	round_num += 1
-	emit_signal("play_signal",0)
+	#emit_signal("play_signal",0)
 	if round_num >= stage_note_arrays.size():
 		get_tree().quit()
 
@@ -172,7 +192,7 @@ func parse_notes_text(text: String) -> Array:
 
 		var note_type := "rest" if symbol == "-" else "note"
 		result.append([dur, note_type])
-	print(result)
+	#print(result)
 	return result
 
 
@@ -216,7 +236,7 @@ func group_into_stages(parsed_notes: Array) -> Array[Array]:
 	# If anything remains at the end, include it
 	if current_stage.size() > 0:
 		stages.append(current_stage)
-	print(stages)
+	#print(stages)
 	return stages
 
 # Reads all text from a given file path and returns it as a String.

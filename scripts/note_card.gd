@@ -98,7 +98,7 @@ func extract_beat_notes_from_full_round(notes_array: Array) -> Array:
 	var previous_beats_duration_counter: float = 0
 	var current_beat_duration_counter: float = 0
 	for note: Array in notes_array:
-		print(note)
+		#print(note)
 		if previous_beats_duration_counter < previous_beats_duration:
 			previous_beats_duration_counter += note[0]
 		elif current_beat_duration_counter < game.one_beat_value:
@@ -106,7 +106,7 @@ func extract_beat_notes_from_full_round(notes_array: Array) -> Array:
 			current_beat_duration_counter += note[0]
 		else:
 			break
-	print("new note array is: " + str(new_notes_array))
+	#print("new note array is: " + str(new_notes_array))
 	return new_notes_array
 
 func construct_notes_dictionary(note_durations_array: Array, next: bool = false) -> void:
@@ -126,7 +126,7 @@ func construct_notes_dictionary(note_durations_array: Array, next: bool = false)
 				notes_dictionary[index]["game_object"] = note_2
 			index += 1
 			
-		print("note_dictionary is: " + str(notes_dictionary))
+		#print("note_dictionary is: " + str(notes_dictionary))
 		calculate_note_timings()
 		#clear_note_visuals()
 		update_note_visuals()
@@ -145,7 +145,7 @@ func construct_notes_dictionary(note_durations_array: Array, next: bool = false)
 				next_notes_dictionary[index]["game_object"] = display_note_2
 			index += 1
 			
-		print("note_dictionary is: " + str(notes_dictionary))
+		#print("note_dictionary is: " + str(notes_dictionary))
 		#calculate_note_timings()
 		#clear_note_visuals()
 		update_note_visuals()
@@ -235,7 +235,8 @@ func beat_signal_effects(round_beat: int, verify: bool = true) -> void:
 
 func activate_signal_effects(round_beat: int, verify: bool = true) -> void:
 	if round_beat == beat_num:
-		print(str(beat_num) + " card activated")
+		pass
+		#print(str(beat_num) + " card activated")
 
 
 func play(time: float) -> void:
@@ -397,7 +398,7 @@ func transition_to_next_card_visual() -> void:
 func scroll_up(delta: float, time_to_scroll: float, distance: float) -> void:
 	time_scrolling += delta
 	var weight: float = clamp(time_scrolling / time_to_scroll,0,1)
-	print(weight)
+	#print(weight)
 	var target_position: Vector2 = Vector2(original_position.x,original_position.y - distance)
 	position = lerp(original_position,target_position,weight)
 	#if weight >= 1:
