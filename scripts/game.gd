@@ -42,8 +42,9 @@ func played_on_rest() -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("play"):
+		play_sound()
 		if delayed_play_allowed:
-			play_sound()
+			#play_sound()
 			print("calling for delayed play")
 			delayed_play_in_progress = true
 		else:
@@ -118,9 +119,10 @@ func _process(delta: float) -> void:
 			#elapsed_round_time = 0
 
 func beat_counter(delta: float) -> void:
-	if beat_num == 1 and delayed_play_in_progress:
-		print("executing delayed play")
-		emit_signal("play_signal",0)
+	if beat_num == 1:
+		if delayed_play_in_progress:
+			print("executing delayed play")
+			emit_signal("play_signal",0)
 		allow_delayed_play(false)
 	one_beat_duration_counter += delta
 	if one_beat_duration_counter >= one_beat_duration:

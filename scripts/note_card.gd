@@ -259,7 +259,8 @@ func play(time: float) -> void:
 				else:
 					miss_note_by_index(i )
 				if notes_dictionary[i]["type"] == "note":
-					game.play_sound()
+					pass
+					#game.play_sound()
 				elif notes_dictionary[i]["type"] == "rest":
 					game.played_on_rest()
 				return
@@ -274,7 +275,7 @@ func miss_note_by_index(note_index: int) -> void:
 
 func play_note_by_index(note_index: int, bad_play: bool = false) -> void:
 	if note_index in notes_dictionary:
-		if notes_dictionary[note_index]["status"] == note_status_types.ACTIVE:
+		if notes_dictionary[note_index]["status"] == note_status_types.ACTIVE and notes_dictionary[note_index]["type"] == "note":
 			if bad_play:
 				game.update_score(5)
 				game.update_streak_counter()
