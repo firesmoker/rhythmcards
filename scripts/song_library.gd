@@ -1,25 +1,7 @@
 # AUTOLOAD THIS
 extends Node
 
-const Song = preload("res://scripts/song.gd")
-
-var songs: Array[Song] = [
-	Song.new({
-		"song_id": "generic_65bpm",
-		"melody_filename": "res://levels/65bpm.txt",
-		"tempo": 65.0,
-		"bgm_filename": "res://music/65bpm.wav",
-		"image_filename": ""
-	}),
-
-	Song.new({
-		"song_id": "generic_98bpm",
-		"melody_filename": "res://levels/98bpm.txt",
-		"tempo": 98.0,
-		"bgm_filename": "res://music/98bpm.wav",
-		"image_filename": ""
-	}),
-]
+#const Song = preload("res://scripts/song.gd")
 
 func get_song_by_id(id: String) -> Song:
 	for s in songs:
@@ -31,3 +13,21 @@ func get_song_by_id(id: String) -> Song:
 
 func get_all_songs() -> Array[Song]:
 	return songs.duplicate()
+
+var songs: Array[Song] = [
+	Song.new({
+		"song_id": "generic_65bpm",
+		"melody_filename": "res://levels/65bpm.txt",
+		"tempo": 65.0,
+		"bgm_filename": "res://music/65bpm.wav",
+		"image_filename": "",
+	}),
+
+	Song.new({
+		"song_id": "generic_98bpm",
+		"melody_filename": "res://levels/98bpm.txt",
+		"tempo": 98.0,
+		"bgm_filename": "res://music/98bpm.wav",
+		"image_filename": ""
+	}),
+]

@@ -4,6 +4,10 @@ var ready_for_button_up: bool = false
 var song: Song
 #@export var melody_filename: String = "98bpm"
 #var new_level_dictionary: Dictionary
+@onready var song_name: Label = $DetailsPanel/SongName
+
+func _ready() -> void:
+	song_name.text = song.song_id
 
 func _on_button_up() -> void:
 	if ready_for_button_up:
@@ -11,7 +15,7 @@ func _on_button_up() -> void:
 		#Game.set_level_details(new_level_dictionary)
 		#print("switching song")
 		Game.set_current_song(song)
-		get_tree().change_scene_to_file("res://game.tscn")
+		get_tree().change_scene_to_file("res://scenes/game.tscn")
 	ready_for_button_up = false
 
 func build_level_dictionary() -> void:

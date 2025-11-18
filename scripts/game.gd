@@ -176,7 +176,7 @@ func _on_round_changed(round: int) -> void:
 	round_num += 1
 	#emit_signal("play_signal",0)
 	if round_num >= stage_note_arrays.size():
-		get_tree().quit()
+		return_to_song_selection()
 
 # Parses a comma-separated line of <symbol>:<duration> items.
 # Example input: "-:1/4, C4:1/8, E3:1/2"
@@ -312,7 +312,10 @@ func reset_streak_counter() -> void:
 
 
 func _on_music_player_finished() -> void:
-	get_tree().quit()
+	return_to_song_selection()
 
 static func set_current_song(song: Song) -> void:
 	current_song = song
+
+func return_to_song_selection() -> void:
+	get_tree().change_scene_to_file("res://scenes/content_selection.tscn")

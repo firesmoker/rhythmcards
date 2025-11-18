@@ -4,8 +4,32 @@
 [ext_resource type="Script" uid="uid://bw0r1cujf5mb2" path="res://scripts/song_button.gd" id="2_87opf"]
 
 [node name="SongButton" type="TextureButton"]
+custom_minimum_size = Vector2(310, 310)
+offset_right = 310.0
+offset_bottom = 310.0
 texture_normal = ExtResource("1_84p4r")
+stretch_mode = 0
 script = ExtResource("2_87opf")
+
+[node name="DetailsPanel" type="Panel" parent="."]
+layout_mode = 1
+offset_top = 144.0
+offset_right = 305.0
+offset_bottom = 310.0
+mouse_filter = 2
+
+[node name="SongName" type="Label" parent="DetailsPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 54
+text = "Song Name"
+vertical_alignment = 1
+autowrap_mode = 3
+metadata/_edit_lock_ = true
 
 [connection signal="button_down" from="." to="." method="_on_button_down"]
 [connection signal="button_up" from="." to="." method="_on_button_up"]
