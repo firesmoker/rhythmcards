@@ -343,8 +343,8 @@ func toggle_highlight(toggle: bool) -> void:
 func selection_pulse(round_beat: int,time: float = 0.2) -> void:
 	if round_beat == beat_num:
 		selection_panel.self_modulate.a = 1
-		#await get_tree().create_timer(time).timeout
-		#scale = scale*1/1.15
+		#if beat_num == 1 or beat_num == 5:
+			#selection_panel.self_modulate.a = 1
 
 func pulse(round_beat: int,time: float = 0.2) -> void:
 	if round_beat == beat_num:

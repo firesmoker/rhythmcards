@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://j3wnbwulmccx" path="res://scripts/game.gd" id="1_80nbo"]
 [ext_resource type="PackedScene" uid="uid://degsnrielqyat" path="res://scenes/note_card.tscn" id="2_e2o6t"]
-[ext_resource type="AudioStream" uid="uid://cvjms57u65gl4" path="res://music/test8.wav" id="3_fc0e3"]
+[ext_resource type="AudioStream" uid="uid://bfcan4vkexdbx" path="res://music/65bpm.wav" id="3_fc0e3"]
 [ext_resource type="AudioStream" uid="uid://2jnksfmcxlo2" path="res://sfx/clap.wav" id="4_fc0e3"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e2o6t"]
@@ -137,6 +137,7 @@ text = "Streak: 0"
 
 [connection signal="beat_signal" from="." to="." method="_on_beat_signal"]
 [connection signal="round_changed" from="." to="." method="_on_round_changed"]
+[connection signal="finished" from="MusicPlayer" to="." method="_on_music_player_finished"]
 
 [editable path="CanvasLayer/NoteCard1"]
 [editable path="CanvasLayer/NoteCard2"]

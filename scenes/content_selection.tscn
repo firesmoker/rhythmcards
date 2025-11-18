@@ -1,0 +1,35 @@
+[gd_scene load_steps=3 format=3 uid="uid://1p1tssxmkgn4"]
+
+[ext_resource type="Script" uid="uid://c50ufm5enek0k" path="res://scripts/content_selection_screen.gd" id="1_8rqad"]
+[ext_resource type="Theme" uid="uid://cepfdjvip3jem" path="res://background_theme.tres" id="1_jnc02"]
+
+[node name="ContentSelection" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_8rqad")
+
+[node name="Background" type="Panel" parent="."]
+z_index = -10
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_jnc02")
+
+[node name="SongScroller" type="ScrollContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SongGrid" type="GridContainer" parent="SongScroller"]
+layout_mode = 2
+columns = 8

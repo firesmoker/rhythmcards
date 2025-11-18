@@ -1,5 +1,7 @@
 class_name Game extends Control
 
+#static var level_details: Dictionary
+static var current_song: Song
 @onready var music_player: AudioStreamPlayer = $MusicPlayer
 @onready var sfx_player: AudioStreamPlayer = $SFXPlayer
 @onready var points_label: Label = $HUD/PointsLabel
@@ -19,7 +21,7 @@ var beat_num: int = 1
 var time_signature: int = 4
 var number_of_bars: int = 2
 var number_of_beats_in_round: int
-var tempo: float = 95
+var tempo: float = 65
 var round_duration: float
 var elapsed_round_time: float = 0
 var round_num: float:
@@ -85,8 +87,25 @@ func construct_dummy_level() -> void:
 			stage_note_arrays.append(even_array.duplicate())
 	#print(stage_note_arrays)
 
+#func _init() -> void:
+	#if level_details.is_empty():
+		#fallback_to_default_level_details()
+
+func _init() -> void:
+	if current_song == null:
+		fallback_to_default_level_details()
+
+func fallback_to_default_level_details() -> void:
+	set_current_song(SongLibrary.get_song_by_id("generic_65bpm"))
+	print("current_song is:")
+	current_song.print_details()
+	print("fallback to default level details")
+	#var new_dictionary: Dictionary = {}
+	#new_dictionary["melody_filename"] = "65bpm"
+	#set_level_details(current_song)
+
 func _ready() -> void:
-	build_level()
+	build_level(current_song)
 	#construct_dummy_level()
 	one_beat_duration = 60 / tempo
 	#print(one_beat_duration)
@@ -123,7 +142,8 @@ func beat_counter(delta: float) -> void:
 		if delayed_play_in_progress:
 			print("executing delayed play")
 			emit_signal("play_signal",0)
-		allow_delayed_play(false)
+		if delayed_play_allowed:
+			allow_delayed_play(false)
 	one_beat_duration_counter += delta
 	if one_beat_duration_counter >= one_beat_duration:
 		beat_num += 1
@@ -253,9 +273,18 @@ func read_text_file(path: String) -> String:
 	file.close()
 	return text
 
-func build_level() -> void:
-	stage_note_arrays = group_into_stages(parse_notes_text(read_text_file("res://levels/test8.txt")))
+func build_level(song: Song) -> void:
+	stage_note_arrays = group_into_stages(parse_notes_text(read_text_file(song.melody_filename)))
+	music_player.stream = load(song.bgm_filename)
+	tempo = song.tempo
 
+
+
+#static func set_level_details(new_level_details: Dictionary = level_details) -> void:
+	#level_details = new_level_details
+	
+#static func set_level_details(song: Song) -> void:
+	#level_details = new_level_details
 
 func _notification(what):
 	if what == NOTIFICATION_APPLICATION_FOCUS_OUT:
@@ -280,3 +309,10 @@ func update_streak_counter(num: int = 1) -> void:
 func reset_streak_counter() -> void:
 	streak_counter = 0
 	streak_label.text = "Streak: " + str(streak_counter)
+
+
+func _on_music_player_finished() -> void:
+	get_tree().quit()
+
+static func set_current_song(song: Song) -> void:
+	current_song = song
