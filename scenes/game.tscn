@@ -19,13 +19,11 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_lbhrr")
-metadata/_edit_lock_ = true
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
-
-[node name="Background" type="Panel" parent="CanvasLayer"]
+[node name="Background" type="Panel" parent="."]
 z_index = -10
 z_as_relative = false
+layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -34,81 +32,106 @@ grow_vertical = 2
 theme = SubResource("Theme_feb5d")
 metadata/_edit_lock_ = true
 
-[node name="NoteCard1" parent="CanvasLayer" instance=ExtResource("2_iywne")]
-offset_left = 248.0
-offset_top = 155.0
-offset_right = 388.0
-offset_bottom = 295.0
+[node name="GameObjects" type="CanvasLayer" parent="."]
+follow_viewport_enabled = true
+
+[node name="Control" type="Control" parent="GameObjects"]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -252.16
+offset_right = 20.0
+offset_bottom = -212.16
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="NoteCard1" parent="GameObjects/Control" instance=ExtResource("2_iywne")]
+layout_mode = 0
+offset_left = -291.0
+offset_top = -42.839996
+offset_right = -151.0
+offset_bottom = 97.16
 next_notes = Array[float]([0.25])
 
-[node name="NoteCardDisplay" parent="CanvasLayer/NoteCard1" index="5"]
+[node name="NoteCardDisplay" parent="GameObjects/Control/NoteCard1" index="5"]
 visible = false
 
-[node name="NoteCard2" parent="CanvasLayer" instance=ExtResource("2_iywne")]
-offset_left = 417.0
-offset_top = 155.0
-offset_right = 557.0
-offset_bottom = 295.0
+[node name="NoteCard2" parent="GameObjects/Control" instance=ExtResource("2_iywne")]
+layout_mode = 0
+offset_left = -122.0
+offset_top = -42.839996
+offset_right = 18.0
+offset_bottom = 97.16
 notes = Array[float]([0.25])
 next_notes = Array[float]([0.125, 0.125])
 beat_num = 2
 
-[node name="NoteCardDisplay" parent="CanvasLayer/NoteCard2" index="5"]
+[node name="NoteCardDisplay" parent="GameObjects/Control/NoteCard2" index="5"]
 visible = false
 
-[node name="NoteCard3" parent="CanvasLayer" instance=ExtResource("2_iywne")]
-offset_left = 578.0
-offset_top = 155.0
-offset_right = 718.0
-offset_bottom = 295.0
+[node name="NoteCard3" parent="GameObjects/Control" instance=ExtResource("2_iywne")]
+layout_mode = 0
+offset_left = 39.0
+offset_top = -42.839996
+offset_right = 179.0
+offset_bottom = 97.16
 next_notes = Array[float]([0.125])
 beat_num = 3
 
-[node name="NoteCardDisplay" parent="CanvasLayer/NoteCard3" index="5"]
+[node name="NoteCardDisplay" parent="GameObjects/Control/NoteCard3" index="5"]
 visible = false
 
-[node name="NoteCard4" parent="CanvasLayer" instance=ExtResource("2_iywne")]
-offset_left = 752.0
-offset_top = 155.0
-offset_right = 892.0
-offset_bottom = 295.0
+[node name="NoteCard4" parent="GameObjects/Control" instance=ExtResource("2_iywne")]
+layout_mode = 0
+offset_left = 213.0
+offset_top = -42.839996
+offset_right = 353.0
+offset_bottom = 97.16
 notes = Array[float]([0.25])
 next_notes = Array[float]([0.125, 0.125])
 beat_num = 4
 
-[node name="NoteCardDisplay" parent="CanvasLayer/NoteCard4" index="5"]
+[node name="NoteCardDisplay" parent="GameObjects/Control/NoteCard4" index="5"]
 visible = false
 
-[node name="NoteCard5" parent="CanvasLayer" instance=ExtResource("2_iywne")]
-offset_left = 248.0
-offset_top = 333.0
-offset_right = 388.0
-offset_bottom = 473.0
+[node name="NoteCard5" parent="GameObjects/Control" instance=ExtResource("2_iywne")]
+layout_mode = 0
+offset_left = -291.0
+offset_top = 135.16
+offset_right = -151.0
+offset_bottom = 275.16
 next_notes = Array[float]([0.25])
 beat_num = 5
 
-[node name="NoteCard6" parent="CanvasLayer" instance=ExtResource("2_iywne")]
-offset_left = 417.0
-offset_top = 333.0
-offset_right = 557.0
-offset_bottom = 473.0
+[node name="NoteCard6" parent="GameObjects/Control" instance=ExtResource("2_iywne")]
+layout_mode = 0
+offset_left = -122.0
+offset_top = 135.16
+offset_right = 18.0
+offset_bottom = 275.16
 notes = Array[float]([0.25])
 next_notes = Array[float]([0.125, 0.125])
 beat_num = 6
 
-[node name="NoteCard7" parent="CanvasLayer" instance=ExtResource("2_iywne")]
-offset_left = 578.0
-offset_top = 333.0
-offset_right = 718.0
-offset_bottom = 473.0
+[node name="NoteCard7" parent="GameObjects/Control" instance=ExtResource("2_iywne")]
+layout_mode = 0
+offset_left = 39.0
+offset_top = 135.16
+offset_right = 179.0
+offset_bottom = 275.16
 next_notes = Array[float]([0.125])
 beat_num = 7
 
-[node name="NoteCard8" parent="CanvasLayer" instance=ExtResource("2_iywne")]
-offset_left = 752.0
-offset_top = 333.0
-offset_right = 892.0
-offset_bottom = 473.0
+[node name="NoteCard8" parent="GameObjects/Control" instance=ExtResource("2_iywne")]
+layout_mode = 0
+offset_left = 213.0
+offset_top = 135.16
+offset_right = 353.0
+offset_bottom = 275.16
 notes = Array[float]([0.25])
 next_notes = Array[float]([0.125, 0.125])
 beat_num = 8
@@ -130,18 +153,18 @@ theme_override_font_sizes/font_size = 60
 text = "Score:"
 
 [node name="StreakLabel" type="Label" parent="HUD"]
-offset_left = 786.0
+offset_left = 1425.0
 offset_top = 19.0
-offset_right = 1045.0
+offset_right = 1684.0
 offset_bottom = 109.0
 theme_override_font_sizes/font_size = 60
 text = "Streak: 0"
 
 [node name="Button" type="Button" parent="HUD"]
 z_index = 50
-offset_left = 1049.0
+offset_left = 1784.0
 offset_top = 1.0
-offset_right = 1150.0
+offset_right = 1885.0
 offset_bottom = 107.0
 theme_override_font_sizes/font_size = 60
 text = ">"
@@ -152,7 +175,7 @@ autowrap_mode = 3
 [connection signal="finished" from="MusicPlayer" to="." method="_on_music_player_finished"]
 [connection signal="button_up" from="HUD/Button" to="." method="return_to_song_selection"]
 
-[editable path="CanvasLayer/NoteCard1"]
-[editable path="CanvasLayer/NoteCard2"]
-[editable path="CanvasLayer/NoteCard3"]
-[editable path="CanvasLayer/NoteCard4"]
+[editable path="GameObjects/Control/NoteCard1"]
+[editable path="GameObjects/Control/NoteCard2"]
+[editable path="GameObjects/Control/NoteCard3"]
+[editable path="GameObjects/Control/NoteCard4"]

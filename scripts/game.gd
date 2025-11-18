@@ -42,21 +42,31 @@ func played_on_rest() -> void:
 	sfx_player.play()
 	reset_streak_counter()
 
+func _input(event: InputEvent) -> void:
+	if event is InputEventScreenTouch:
+		if event.pressed:
+			Input.vibrate_handheld(50)
+			play()
+
 func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed("play"):
-		play_sound()
-		if delayed_play_allowed:
-			#play_sound()
-			print("calling for delayed play")
-			delayed_play_in_progress = true
-		else:
-			print("play_signal, beat_num is: " + str(beat_num))
-			if beat_num < 0:
-				pass
-			else:
-				#play_sound()
-				emit_signal("play_signal",elapsed_round_time)
+	
+	if event.is_action_pressed("play") or event is InputEventScreenTouch:
+		play()
 		
+
+func play() -> void:
+	play_sound()
+	if delayed_play_allowed:
+		#play_sound()
+		print("calling for delayed play")
+		delayed_play_in_progress = true
+	else:
+		print("play_signal, beat_num is: " + str(beat_num))
+		if beat_num < 0:
+			pass
+		else:
+			#play_sound()
+			emit_signal("play_signal",elapsed_round_time)
 
 func play_sound() -> void:
 	sfx_player.stream = preload("res://sfx/clap.wav")
@@ -158,9 +168,9 @@ func beat_counter(delta: float) -> void:
 		emit_signal("beat_signal",beat_num)
 		#print("beat_signal")
 	
-func _on_beat_signal(beat_num: int) -> void:
+func _on_beat_signal(beat_num_index: int) -> void:
 	#metronome.play()
-	if beat_num == number_of_beats_in_round:
+	if beat_num_index == number_of_beats_in_round:
 		scroll_cards_up()
 	#print(beat_num)
 
@@ -237,7 +247,7 @@ func group_into_stages(parsed_notes: Array) -> Array[Array]:
 
 	for entry: Array in parsed_notes:
 		var dur: float= entry[0]
-		var typ: String = entry[1]
+		#var typ: String = entry[1]
 		var stage_limit: float = number_of_bars * time_signature / 4
 		# If adding this note exceeds the stage limit (1.0),
 		# finalize current stage and start a new one.
