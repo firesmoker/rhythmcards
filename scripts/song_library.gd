@@ -30,4 +30,28 @@ var songs: Array[Song] = [
 		"bgm_filename": "res://music/98bpm.wav",
 		"image_filename": ""
 	}),
+	
+		Song.new({
+		"song_id": "generic_98bpm_86SLOW",
+		"melody_filename": "res://levels/98bpm_86.txt",
+		"tempo": 86.0,
+		"bgm_filename": "res://music/98bpm_86.wav",
+		"image_filename": ""
+	}),
+	
+	Song.new({
+		"song_id": "generic_95bpm",
+		"melody_filename": "res://levels/95bpm.txt",
+		"tempo": 95.0,
+		"bgm_filename": "res://music/95bpm.wav",
+		"image_filename": ""
+	}),
+	
+	Song.new({
+		"song_id": "generic_97bpm",
+		"melody_filename": "res://levels/97bpm.txt",
+		"tempo": 97.0,
+		"bgm_filename": "res://music/97bpm.wav",
+		"image_filename": ""
+	}),
 ]

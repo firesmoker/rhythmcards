@@ -2,10 +2,14 @@ class_name Game extends Control
 
 #static var level_details: Dictionary
 static var current_song: Song
+static var hints_on: bool = true
+static var vibration_strength: float = 0.1
+static var vibration_time: int = 500
 @onready var music_player: AudioStreamPlayer = $MusicPlayer
 @onready var sfx_player: AudioStreamPlayer = $SFXPlayer
 @onready var points_label: Label = $HUD/PointsLabel
 @onready var streak_label: Label = $HUD/StreakLabel
+var streak_label_original_scale: Vector2
 
 var delayed_play_allowed: bool = false
 var delayed_play_in_progress: bool = false
@@ -15,6 +19,7 @@ var one_beat_duration_counter: float = 0
 var points: int = 0
 var pre_beat_duration_counter: float = 0
 var streak_counter: int = 0
+var combo_counter: int = 1
 var last_note_card_finished: int = 0
 @export var stage_note_arrays: Array[Array]
 var beat_num: int = 1
@@ -38,20 +43,21 @@ signal round_changed
 signal scroll
 
 func played_on_rest() -> void:
-	sfx_player.stream = preload("res://sfx/wrong4.wav")
-	sfx_player.play()
+	#sfx_player.stream = preload("res://sfx/wrong4.wav")
+	#sfx_player.play()
 	reset_streak_counter()
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventScreenTouch:
 		if event.pressed:
-			Input.vibrate_handheld(50)
 			play()
-
-func _unhandled_input(event: InputEvent) -> void:
-	
-	if event.is_action_pressed("play") or event is InputEventScreenTouch:
+			print(vibration_time)
+			print(vibration_strength)
+			Input.vibrate_handheld(Game.vibration_time,Game.vibration_strength)
+	elif event.is_action_pressed("play"):
 		play()
+
+	
 		
 
 func play() -> void:
@@ -69,7 +75,7 @@ func play() -> void:
 			emit_signal("play_signal",elapsed_round_time)
 
 func play_sound() -> void:
-	sfx_player.stream = preload("res://sfx/clap.wav")
+	sfx_player.stream = load("res://sfx/clap.wav")
 	sfx_player.play()
 
 func construct_dummy_level() -> void:
@@ -110,42 +116,27 @@ func fallback_to_default_level_details() -> void:
 	print("current_song is:")
 	current_song.print_details()
 	print("fallback to default level details")
-	#var new_dictionary: Dictionary = {}
-	#new_dictionary["melody_filename"] = "65bpm"
-	#set_level_details(current_song)
 
 func _ready() -> void:
+	OS.request_permissions()
+	streak_label_original_scale = streak_label.scale
 	build_level(current_song)
-	#construct_dummy_level()
 	one_beat_duration = 60 / tempo
-	#print(one_beat_duration)
 	number_of_beats_in_round = time_signature * number_of_bars
 	round_duration = number_of_beats_in_round * one_beat_duration
 	round_num = -1
-	#emit_signal("round_changed",0)
-	#emit_signal("beat_signal",beat_num)
 
 func _process(delta: float) -> void:
+	streak_label_return_to_original_size()
 	if music_player.playing:
 		elapsed_round_time += delta
-	#print(elapsed_round_time)
-	#pre_beat_counter(delta)
 		beat_counter(delta)
 	if last_note_card_finished == beat_num:
-		#print("ready to pass to next card: " + str(last_note_card_finished + 1))
 		emit_signal("activate_signal",last_note_card_finished + 1,false)
 	if round_num == -1:
 		emit_signal("round_changed",0)
 		emit_signal("beat_signal",beat_num)
 
-#func pre_beat_counter(delta: float) -> void:
-	#pre_beat_duration_counter += delta
-	#if pre_beat_duration_counter >= one_beat_duration/2:
-		#pre_beat_num += 1
-		#pre_beat_num -= one_beat_duration
-		#if pre_beat_num > number_of_beats_in_round:
-			#pre_beat_num = 1
-			#elapsed_round_time = 0
 
 func beat_counter(delta: float) -> void:
 	if beat_num == 1:
@@ -166,13 +157,10 @@ func beat_counter(delta: float) -> void:
 			emit_signal("round_changed",round_num)
 			last_note_card_finished = -1
 		emit_signal("beat_signal",beat_num)
-		#print("beat_signal")
 	
 func _on_beat_signal(beat_num_index: int) -> void:
-	#metronome.play()
 	if beat_num_index == number_of_beats_in_round:
 		scroll_cards_up()
-	#print(beat_num)
 
 func allow_delayed_play(toggle: bool = true) -> void:
 	print("delayed play allowed?: " + str(toggle))
@@ -181,7 +169,6 @@ func allow_delayed_play(toggle: bool = true) -> void:
 		delayed_play_in_progress = false
 
 func _on_round_changed(round: int) -> void:
-	#print("round changed")
 	one_beat_duration_counter = 0
 	round_num += 1
 	#emit_signal("play_signal",0)
@@ -290,11 +277,6 @@ func build_level(song: Song) -> void:
 
 
 
-#static func set_level_details(new_level_details: Dictionary = level_details) -> void:
-	#level_details = new_level_details
-	
-#static func set_level_details(song: Song) -> void:
-	#level_details = new_level_details
 
 func _notification(what):
 	if what == NOTIFICATION_APPLICATION_FOCUS_OUT:
@@ -309,16 +291,20 @@ func scroll_cards_up() -> void:
 	emit_signal("scroll")
 
 func update_score(points_change: float) -> void:
-	points += points_change
-	points_label.text = "Score: " + str(points)
+	points += points_change * combo_counter
+	points_label.text = "Score " + str(points)
 
 func update_streak_counter(num: int = 1) -> void:
 	streak_counter += num
-	streak_label.text = "Streak: " + str(streak_counter)
+	if streak_counter % 4 == 0:
+		combo_counter += 1
+		streak_label.text = "Combo x" + str(combo_counter)
+		streak_label_size_pulse()
 
 func reset_streak_counter() -> void:
 	streak_counter = 0
-	streak_label.text = "Streak: " + str(streak_counter)
+	combo_counter = 1
+	streak_label.text = "Combo x" + str(combo_counter)
 
 
 func _on_music_player_finished() -> void:
@@ -329,3 +315,12 @@ static func set_current_song(song: Song) -> void:
 
 func return_to_song_selection() -> void:
 	get_tree().change_scene_to_file("res://scenes/content_selection.tscn")
+
+func streak_label_size_pulse() -> void:
+	streak_label.scale *= 2
+
+func streak_label_return_to_original_size() -> void:
+	if streak_label.scale > streak_label_original_scale:
+		streak_label.scale *= 0.97
+	else:
+		streak_label.scale = streak_label_original_scale

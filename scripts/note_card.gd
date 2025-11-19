@@ -226,7 +226,8 @@ func deactivate() -> void:
 	active = false
 
 func beat_signal_effects(round_beat: int, verify: bool = true) -> void:
-	selection_pulse(round_beat)
+	if game.hints_on:
+		selection_pulse(round_beat)
 	start_deactivation_timer(round_beat, game.one_beat_duration)
 	toggle_by_beat(round_beat, true)
 	#if round_beat == beat_num:

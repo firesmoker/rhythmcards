@@ -15,6 +15,10 @@ run/main_scene="uid://1p1tssxmkgn4"
 config/features=PackedStringArray("4.5", "Forward Plus")
 config/icon="res://icon.svg"
 
+[audio]
+
+driver/output_latency=1
+
 [autoload]
 
 SongLibrary="*res://scripts/song_library.gd"
