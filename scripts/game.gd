@@ -9,8 +9,11 @@ static var vibration_time: int = 500
 @onready var sfx_player: AudioStreamPlayer = $SFXPlayer
 @onready var points_label: Label = $HUD/PointsLabel
 @onready var streak_label: Label = $HUD/StreakLabel
+var note_card_scroll_speed: float
 var streak_label_original_scale: Vector2
-
+var trying_to_scroll : bool = false
+var scrolling_allowed: bool = false
+var scrolling: bool = false
 var delayed_play_allowed: bool = false
 var delayed_play_in_progress: bool = false
 var one_beat_duration: float = 1
@@ -48,6 +51,7 @@ func played_on_rest() -> void:
 	reset_streak_counter()
 
 func _input(event: InputEvent) -> void:
+	OS.request_permissions()
 	if event is InputEventScreenTouch:
 		if event.pressed:
 			play()
@@ -61,7 +65,7 @@ func _input(event: InputEvent) -> void:
 		
 
 func play() -> void:
-	play_sound()
+	#play_sound()
 	if delayed_play_allowed:
 		#play_sound()
 		print("calling for delayed play")
@@ -111,6 +115,10 @@ func _init() -> void:
 	if current_song == null:
 		fallback_to_default_level_details()
 
+func set_scroll_speed() -> void:
+	note_card_scroll_speed = one_beat_duration - one_beat_duration_counter
+	#note_card_scroll_speed = one_beat_duration * 0.75
+
 func fallback_to_default_level_details() -> void:
 	set_current_song(SongLibrary.get_song_by_id("generic_65bpm"))
 	print("current_song is:")
@@ -125,6 +133,7 @@ func _ready() -> void:
 	number_of_beats_in_round = time_signature * number_of_bars
 	round_duration = number_of_beats_in_round * one_beat_duration
 	round_num = -1
+	set_scroll_speed()
 
 func _process(delta: float) -> void:
 	streak_label_return_to_original_size()
@@ -136,6 +145,7 @@ func _process(delta: float) -> void:
 	if round_num == -1:
 		emit_signal("round_changed",0)
 		emit_signal("beat_signal",beat_num)
+	try_to_initiate_scroll()
 
 
 func beat_counter(delta: float) -> void:
@@ -149,7 +159,7 @@ func beat_counter(delta: float) -> void:
 	if one_beat_duration_counter >= one_beat_duration:
 		beat_num += 1
 		one_beat_duration_counter -= one_beat_duration
-		if beat_num == number_of_beats_in_round:
+		if beat_num == number_of_beats_in_round and last_note_card_finished == number_of_beats_in_round:
 			allow_delayed_play()
 		if beat_num > number_of_beats_in_round:
 			beat_num = 1
@@ -160,7 +170,7 @@ func beat_counter(delta: float) -> void:
 	
 func _on_beat_signal(beat_num_index: int) -> void:
 	if beat_num_index == number_of_beats_in_round:
-		scroll_cards_up()
+		trying_to_scroll = true
 
 func allow_delayed_play(toggle: bool = true) -> void:
 	print("delayed play allowed?: " + str(toggle))
@@ -168,8 +178,12 @@ func allow_delayed_play(toggle: bool = true) -> void:
 	if toggle == false:
 		delayed_play_in_progress = false
 
-func _on_round_changed(round: int) -> void:
+func _on_round_changed(_round_index: int) -> void:
 	one_beat_duration_counter = 0
+	scrolling = false
+	trying_to_scroll = false
+	scrolling_allowed = false
+	
 	round_num += 1
 	#emit_signal("play_signal",0)
 	if round_num >= stage_note_arrays.size():
@@ -288,7 +302,18 @@ func _notification(what):
 		get_tree().paused = false
 
 func scroll_cards_up() -> void:
-	emit_signal("scroll")
+	if not scrolling:
+		scrolling = true
+		set_scroll_speed()
+		emit_signal("scroll")
+
+func try_to_initiate_scroll() -> void:
+	if trying_to_scroll:
+		if last_note_card_finished == number_of_beats_in_round:
+			scrolling_allowed = true
+	if scrolling_allowed:
+		scroll_cards_up()
+			
 
 func update_score(points_change: float) -> void:
 	points += points_change * combo_counter

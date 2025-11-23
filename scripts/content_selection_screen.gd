@@ -33,6 +33,7 @@ func _on_check_button_toggled(toggled_on: bool) -> void:
 
 
 func _on_change_vib_button_up() -> void:
+	OS.request_permissions()
 	Game.vibration_time = float(vib_time.text)
 	Game.vibration_strength = float(vib_amp.text)
 	print(Game.vibration_time)

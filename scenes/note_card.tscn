@@ -6,6 +6,7 @@
 
 [node name="NoteCard1" type="Panel"]
 z_index = 1
+custom_minimum_size = Vector2(140, 140)
 offset_right = 140.0
 offset_bottom = 140.0
 theme = ExtResource("1_fmbix")
@@ -26,6 +27,42 @@ layout_mode = 1
 offset_left = 78.0
 offset_top = 9.0
 offset_right = 115.0
+offset_bottom = 124.0
+
+[node name="EarlyNote1" parent="." instance=ExtResource("2_1ac85")]
+visible = false
+modulate = Color(1, 0.73333335, 0.59607846, 1)
+layout_mode = 1
+offset_left = -1.0
+offset_top = 9.0
+offset_right = 36.0
+offset_bottom = 124.0
+
+[node name="LateNote1" parent="." instance=ExtResource("2_1ac85")]
+visible = false
+modulate = Color(1, 0.73333335, 0.59607846, 1)
+layout_mode = 1
+offset_left = 36.0
+offset_top = 9.0
+offset_right = 73.0
+offset_bottom = 124.0
+
+[node name="LateNote2" parent="." instance=ExtResource("2_1ac85")]
+visible = false
+modulate = Color(1, 0.73333335, 0.59607846, 1)
+layout_mode = 1
+offset_left = 95.0
+offset_top = 9.0
+offset_right = 132.0
+offset_bottom = 124.0
+
+[node name="EarlyNote2" parent="." instance=ExtResource("2_1ac85")]
+visible = false
+modulate = Color(1, 0.73333335, 0.59607846, 1)
+layout_mode = 1
+offset_left = 58.0
+offset_top = 9.0
+offset_right = 95.0
 offset_bottom = 124.0
 
 [node name="DeactivateTimer" type="Timer" parent="."]
@@ -50,6 +87,7 @@ grow_vertical = 2
 theme = ExtResource("1_fmbix")
 
 [node name="3DPanel" type="Panel" parent="."]
+visible = false
 self_modulate = Color(0.80687, 0.80687, 0.80687, 1)
 z_index = -1
 layout_mode = 1
@@ -97,6 +135,7 @@ metadata/_edit_lock_ = true
 [node name="DisplayTimer" type="Timer" parent="NoteCardDisplay"]
 
 [node name="3DPanel2" type="Panel" parent="NoteCardDisplay"]
+visible = false
 self_modulate = Color(0.80687, 0.80687, 0.80687, 1)
 z_index = -1
 layout_mode = 1

@@ -16,7 +16,7 @@ func get_all_songs() -> Array[Song]:
 
 var songs: Array[Song] = [
 	Song.new({
-		"song_id": "generic_65bpm",
+		"song_id": "Eigths_65bpm",
 		"melody_filename": "res://levels/65bpm.txt",
 		"tempo": 65.0,
 		"bgm_filename": "res://music/65bpm.wav",
@@ -24,7 +24,7 @@ var songs: Array[Song] = [
 	}),
 
 	Song.new({
-		"song_id": "generic_98bpm",
+		"song_id": "Quarters_98bpm",
 		"melody_filename": "res://levels/98bpm.txt",
 		"tempo": 98.0,
 		"bgm_filename": "res://music/98bpm.wav",
@@ -32,15 +32,15 @@ var songs: Array[Song] = [
 	}),
 	
 		Song.new({
-		"song_id": "generic_98bpm_86SLOW",
-		"melody_filename": "res://levels/98bpm_86.txt",
+		"song_id": "Quarters_98bpm_86SLOW",
+		"melody_filename": "res://levels/98bpm.txt",
 		"tempo": 86.0,
 		"bgm_filename": "res://music/98bpm_86.wav",
 		"image_filename": ""
 	}),
 	
 	Song.new({
-		"song_id": "generic_95bpm",
+		"song_id": "Eights_95bpm",
 		"melody_filename": "res://levels/95bpm.txt",
 		"tempo": 95.0,
 		"bgm_filename": "res://music/95bpm.wav",
@@ -48,10 +48,26 @@ var songs: Array[Song] = [
 	}),
 	
 	Song.new({
-		"song_id": "generic_97bpm",
+		"song_id": "Eights_97bpm",
 		"melody_filename": "res://levels/97bpm.txt",
 		"tempo": 97.0,
 		"bgm_filename": "res://music/97bpm.wav",
+		"image_filename": ""
+	}),
+	
+	Song.new({
+		"song_id": "Rhythm1_75",
+		"melody_filename": "res://levels/Rhythm1_75.txt",
+		"tempo": 75.0,
+		"bgm_filename": "res://music/Rhythm1_75.wav",
+		"image_filename": ""
+	}),
+	
+	Song.new({
+		"song_id": "Simply_80",
+		"melody_filename": "res://levels/Simply_80.txt",
+		"tempo": 80.0,
+		"bgm_filename": "res://music/Simply_80.wav",
 		"image_filename": ""
 	}),
 ]

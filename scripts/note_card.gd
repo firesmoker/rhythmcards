@@ -1,6 +1,11 @@
 class_name NoteCard extends Panel
 @onready var note_1: Note = $Note1
 @onready var note_2: Note = $Note2
+@onready var early_note_1: Note = $EarlyNote1
+@onready var late_note_1: Note = $LateNote1
+@onready var early_note_2: Note = $EarlyNote2
+@onready var late_note_2: Note = $LateNote2
+
 @onready var display_note_1: Note = $NoteCardDisplay/DisplayNote1
 @onready var display_note_2: Note = $NoteCardDisplay/DisplayNote2
 var scrolling: bool = false
@@ -71,6 +76,8 @@ func decide_eigths_type(dictionary: Dictionary = notes_dictionary) -> String:
 	return eighth_type
 
 func round_changed_effects(stage_index: int) -> void:
+	print("Note Card: " + name + " round changed!")
+	reset_early_late_notes_visibility()
 	reset_position()
 	reset_next_notes_alpha()
 	reset_main_card_alpha()
@@ -78,8 +85,8 @@ func round_changed_effects(stage_index: int) -> void:
 	#display_timer.stop()
 	#note_card_display.visible = true
 	if stage_index < game.stage_note_arrays.size():
-		if active:
-			deactivate()
+		#if active:
+			#deactivate()
 		construct_notes_dictionary(extract_beat_notes_from_full_round(game.stage_note_arrays[stage_index]))
 		if stage_index + 1 < game.stage_note_arrays.size():
 			construct_notes_dictionary(extract_beat_notes_from_full_round(game.stage_note_arrays[stage_index + 1]),true)
@@ -169,6 +176,18 @@ func update_note_visuals() -> void:
 			note_status_types.PLAYED_BAD:
 				notes_dictionary[i]["game_object"].modulate =  Color.CORAL
 
+func show_early_late_note(note_num: int, mistake_type: String) -> void:
+	if note_num == 0:
+		if mistake_type == "early":
+			early_note_1.visible = true
+		elif mistake_type == "late":
+			late_note_1.visible = true
+	elif note_num == 1:
+		if mistake_type == "early":
+			early_note_2.visible = true
+		elif mistake_type == "late":
+			late_note_2.visible = true
+
 func calculate_note_timings() -> void:
 	var time_before_card_starts: float = game.one_beat_duration * (beat_num-1)
 	#var index: int = 0
@@ -251,17 +270,18 @@ func play(time: float) -> void:
 			if notes_dictionary[i]["status"] == note_status_types.ACTIVE:
 				if time >= t + d * (1-d):
 					play_note_by_index(i,true)
+					show_early_late_note(i,"late")
 				elif time >= t:
 					play_note_by_index(i)
 				elif time < t and time > t - d:
 					play_note_by_index(i)
 				elif time > t - d * (1-d):
 					play_note_by_index(i, true)
+					show_early_late_note(i,"early")
 				else:
 					miss_note_by_index(i )
 				if notes_dictionary[i]["type"] == "note":
 					pass
-					#game.play_sound()
 				elif notes_dictionary[i]["type"] == "rest":
 					game.played_on_rest()
 				return
@@ -294,13 +314,13 @@ func _process(delta: float) -> void:
 	if scrolling:
 		fade_main_card_out(0.06)
 		dummy_card_fade_in(0.03)
-		scroll_up(delta,game.one_beat_duration * 0.75, 365.0)
+		scroll_up(delta,game.note_card_scroll_speed * 0.75, 365.0)
 	display_card_fade_in(delta, game.one_beat_duration)
 	selection_panel.self_modulate.a -= 0.015
 	if active:
 		#autoplay(game.elapsed_round_time)
 		#play(game.elapsed_round_time)
-		handle_deactivate_and_allow_next_card()
+		update_when_all_notes_finished()
 	update_note_visuals()
  
 func toggle_by_beat(round_beat: int, verify: bool = true) -> void:
@@ -315,8 +335,8 @@ func toggle_by_beat(round_beat: int, verify: bool = true) -> void:
 		#print("for card " + str(beat_num) + " beat_num is " + str(beat_num) + "and round_beat is: " + str(round_beat))
 		active = false
 
-func handle_deactivate_and_allow_next_card() -> void:
-	update_when_all_notes_finished()
+#func handle_deactivate_and_allow_next_card() -> void:
+	#update_when_all_notes_finished()
 
 func update_when_all_notes_finished() -> void:
 	for note in notes_dictionary:
@@ -443,3 +463,10 @@ func fade_main_card_out(rate: float = 0.01) -> void:
 func fade_next_card_notes_in(rate: float = 0.01) -> void:
 	display_note_1.modulate.a += rate
 	display_note_2.modulate.a += rate
+
+func reset_early_late_notes_visibility() -> void:
+	late_note_1.visible = false
+	early_note_1.visible = false
+	late_note_2.visible = false
+	early_note_2.visible = false
+	

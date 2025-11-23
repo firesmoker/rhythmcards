@@ -23,6 +23,11 @@ driver/output_latency=1
 
 SongLibrary="*res://scripts/song_library.gd"
 
+[debug]
+
+gdscript/warnings/integer_division=0
+gdscript/warnings/narrowing_conversion=0
+
 [display]
 
 window/size/viewport_width=1900
