@@ -192,11 +192,12 @@ func _on_round_changed(_round_index: int) -> void:
 	scrolling = false
 	trying_to_scroll = false
 	scrolling_allowed = false
-	
 	round_num += 1
+	music_player.play(round_num*round_duration)
 	#emit_signal("play_signal",0)
 	if round_num >= stage_note_arrays.size():
-		return_to_song_selection()
+		get_tree().change_scene_to_file("res://scenes/win_screen.tscn")
+		#return_to_song_selection()
 
 # Parses a comma-separated line of <symbol>:<duration> items.
 # Example input: "-:1/4, C4:1/8, E3:1/2"
@@ -342,7 +343,8 @@ func reset_streak_counter() -> void:
 
 
 func _on_music_player_finished() -> void:
-	return_to_song_selection()
+	get_tree().change_scene_to_file("res://scenes/win_screen.tscn")
+	#return_to_song_selection()
 
 static func set_current_song(song: Song) -> void:
 	current_song = song
@@ -361,6 +363,7 @@ func streak_label_return_to_original_size() -> void:
 		
 func play_metronome_by_beat(beat_index: int) -> void:
 	if beat_index == 1 or beat_index == 5:
+		first_beat_metronome.stop()
 		first_beat_metronome.play()
 	else:
 		secondary_beat_metronome.play()

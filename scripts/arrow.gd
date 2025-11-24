@@ -45,14 +45,12 @@ func scroll_to_location1(delta: float, time_to_scroll: float, distance: float) -
 	var weight: float = clamp(time_scrolling / time_to_scroll,0,1)
 	var target_position: Vector2 = Vector2(0,arrow_location1.y)
 	position = lerp(Vector2(0,arrow_location2.y),target_position,weight)
-	print("scrolling to location 1")
 
 func scroll_to_location2(delta: float, time_to_scroll: float, distance: float) -> void:
 	time_scrolling += delta
 	var weight: float = clamp(time_scrolling / time_to_scroll,0,1)
 	var target_position: Vector2 = Vector2(0,arrow_location2.y)
 	position = lerp(Vector2(0,arrow_location1.y),target_position,weight)
-	print("scrolling to location 1")
 
 func return_to_normal_scale(delta: float) -> void:
 	scale *= 1 - delta * 2

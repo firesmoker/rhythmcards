@@ -90,6 +90,9 @@ func round_changed_effects(stage_index: int) -> void:
 		construct_notes_dictionary(extract_beat_notes_from_full_round(game.stage_note_arrays[stage_index]))
 		if stage_index + 1 < game.stage_note_arrays.size():
 			construct_notes_dictionary(extract_beat_notes_from_full_round(game.stage_note_arrays[stage_index + 1]),true)
+		else:
+			construct_notes_dictionary(extract_beat_notes_from_full_round(game.stage_note_arrays[0]),true)
+			
 	set_notes_visibility()
 	transition_to_next_card_visual()
 	clear_note_visuals()

@@ -1,0 +1,54 @@
+[gd_scene load_steps=3 format=3 uid="uid://c5alyvxoxoh06"]
+
+[ext_resource type="Script" uid="uid://cog7w7q4cu33o" path="res://scripts/win_screen.gd" id="1_erk2x"]
+[ext_resource type="Theme" uid="uid://b33ea2uo4cl6x" path="res://panel_theme.tres" id="1_wv5lq"]
+
+[node name="WinScreen" type="CanvasLayer"]
+script = ExtResource("1_erk2x")
+
+[node name="ScreenRoot" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Background" type="Panel" parent="ScreenRoot"]
+self_modulate = Color(0.53515625, 0, 1, 1)
+layout_mode = 2
+theme = ExtResource("1_wv5lq")
+
+[node name="ExitButton" type="Button" parent="ScreenRoot/Background"]
+layout_mode = 0
+offset_left = 823.0
+offset_top = 558.0
+offset_right = 1090.0
+offset_bottom = 635.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 50
+text = "Next Song"
+
+[node name="TextPanel" type="MarginContainer" parent="ScreenRoot"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Background" type="Panel" parent="ScreenRoot/TextPanel"]
+self_modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+theme = ExtResource("1_wv5lq")
+
+[node name="TextArea" type="MarginContainer" parent="ScreenRoot/TextPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 30
+
+[node name="Text" type="Label" parent="ScreenRoot/TextPanel/TextArea"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+text = "Nice Job!"
+
+[connection signal="pressed" from="ScreenRoot/Background/ExitButton" to="." method="_on_exit_button_pressed"]
