@@ -1,6 +1,10 @@
 class_name Game extends Control
+@onready var arrow: TextureRect = $GameObjects/Arrow
+@onready var first_beat_metronome: AudioStreamPlayer = $FirstBeatMetronome
+@onready var secondary_beat_metronome: AudioStreamPlayer = $SecondaryBeatMetronome
 
 #static var level_details: Dictionary
+static var metronome_enabled: bool = true
 static var current_song: Song
 static var hints_on: bool = true
 static var vibration_strength: float = 0.1
@@ -71,7 +75,7 @@ func play() -> void:
 		print("calling for delayed play")
 		delayed_play_in_progress = true
 	else:
-		print("play_signal, beat_num is: " + str(beat_num))
+		#print("play_signal, beat_num is: " + str(beat_num))
 		if beat_num < 0:
 			pass
 		else:
@@ -169,6 +173,8 @@ func beat_counter(delta: float) -> void:
 		emit_signal("beat_signal",beat_num)
 	
 func _on_beat_signal(beat_num_index: int) -> void:
+	if metronome_enabled:
+		play_metronome_by_beat(beat_num_index)
 	if beat_num_index == number_of_beats_in_round:
 		trying_to_scroll = true
 
@@ -349,3 +355,9 @@ func streak_label_return_to_original_size() -> void:
 		streak_label.scale *= 0.97
 	else:
 		streak_label.scale = streak_label_original_scale
+		
+func play_metronome_by_beat(beat_index: int) -> void:
+	if beat_index == 1 or beat_index == 5:
+		first_beat_metronome.play()
+	else:
+		secondary_beat_metronome.play()

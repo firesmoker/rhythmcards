@@ -5,6 +5,7 @@ extends Control
 @onready var vib_time: TextEdit = $VibTime
 @onready var vib_amp: TextEdit = $VibAmp
 @onready var change_vib_button: Button = $ChangeVib
+@onready var metronome_check: CheckButton = $MetronomeCheck
 
 var song_button_template: PackedScene = preload("res://scenes/song_button.tscn")
 
@@ -12,6 +13,7 @@ func _ready() -> void:
 	vib_time.text = str(Game.vibration_time)
 	vib_amp.text = str(Game.vibration_strength)
 	check_button.button_pressed = Game.hints_on
+	metronome_check.button_pressed = Game.metronome_enabled
 	create_song_buttons_from_song_library()
 	align_library()
 	
@@ -38,3 +40,7 @@ func _on_change_vib_button_up() -> void:
 	Game.vibration_strength = float(vib_amp.text)
 	print(Game.vibration_time)
 	print(Game.vibration_strength)
+
+
+func _on_metronome_check_toggled(toggled_on: bool) -> void:
+	Game.metronome_enabled = toggled_on

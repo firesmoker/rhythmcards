@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://cknrp6651rakh"]
+
+[ext_resource type="Texture2D" uid="uid://c30l8y36hbe4v" path="res://images/arrow.png" id="1_umosx"]
+[ext_resource type="Script" uid="uid://dx2mf4jemf4ds" path="res://scripts/arrow.gd" id="2_23jat"]
+
+[node name="Arrow" type="TextureRect"]
+offset_right = 123.0
+offset_bottom = 52.0
+pivot_offset = Vector2(61.5, 26)
+texture = ExtResource("1_umosx")
+script = ExtResource("2_23jat")
