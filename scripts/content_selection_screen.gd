@@ -1,11 +1,11 @@
-extends Control
+extends CanvasLayer
 
-@onready var song_grid: GridContainer = $SongScroller/SongGrid
-@onready var check_button: CheckButton = $CheckButton
-@onready var vib_time: TextEdit = $VibTime
-@onready var vib_amp: TextEdit = $VibAmp
-@onready var change_vib_button: Button = $ChangeVib
-@onready var metronome_check: CheckButton = $MetronomeCheck
+@onready var song_grid: GridContainer = $MenuRoot/HBoxContainer/SongScroller/SongGrid
+@onready var check_button: CheckButton = $MenuRoot/HBoxContainer/VBoxContainer/CheckButton
+@onready var vib_time: TextEdit = $MenuRoot/HBoxContainer/VBoxContainer/VibTime
+@onready var vib_amp: TextEdit = $MenuRoot/HBoxContainer/VBoxContainer/VibAmp
+@onready var change_vib_button: Button = $MenuRoot/HBoxContainer/VBoxContainer/ChangeVib
+@onready var metronome_check: CheckButton = $MenuRoot/HBoxContainer/VBoxContainer/MetronomeCheck
 
 var song_button_template: PackedScene = preload("res://scenes/song_button.tscn")
 

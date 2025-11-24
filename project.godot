@@ -33,6 +33,8 @@ gdscript/warnings/narrowing_conversion=0
 window/size/viewport_width=1900
 window/size/viewport_height=900
 window/size/always_on_top=true
+window/stretch/mode="canvas_items"
+window/stretch/aspect="keep_height"
 
 [input]
 

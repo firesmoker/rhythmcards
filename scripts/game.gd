@@ -1,5 +1,4 @@
-class_name Game extends Control
-@onready var arrow: TextureRect = $GameObjects/Arrow
+class_name Game extends CanvasLayer
 @onready var first_beat_metronome: AudioStreamPlayer = $FirstBeatMetronome
 @onready var secondary_beat_metronome: AudioStreamPlayer = $SecondaryBeatMetronome
 
@@ -11,8 +10,8 @@ static var vibration_strength: float = 0.1
 static var vibration_time: int = 500
 @onready var music_player: AudioStreamPlayer = $MusicPlayer
 @onready var sfx_player: AudioStreamPlayer = $SFXPlayer
-@onready var points_label: Label = $HUD/PointsLabel
-@onready var streak_label: Label = $HUD/StreakLabel
+@onready var points_label: Label = $HUD/HudRoot/PointsLabel
+@onready var streak_label: Label = $HUD/HudRoot/StreakLabel
 var note_card_scroll_speed: float
 var streak_label_original_scale: Vector2
 var trying_to_scroll : bool = false
@@ -48,6 +47,10 @@ signal play_signal
 signal activate_signal
 signal round_changed
 signal scroll
+signal note_card_location
+
+func forward_note_card_location(note_card: NoteCard) -> void:
+	emit_signal("note_card_location",note_card)
 
 func played_on_rest() -> void:
 	#sfx_player.stream = preload("res://sfx/wrong4.wav")

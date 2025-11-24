@@ -20,24 +20,13 @@ corner_radius_bottom_left = 36
 [sub_resource type="Theme" id="Theme_feb5d"]
 Panel/styles/panel = SubResource("StyleBoxFlat_e2o6t")
 
-[node name="Game" type="Control"]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -38.0
-offset_top = -5.0
-offset_right = -38.0
-offset_bottom = -5.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="Game" type="CanvasLayer"]
 script = ExtResource("1_lbhrr")
 
 [node name="Background" type="Panel" parent="."]
 self_modulate = Color(0.2, 0.050980393, 0.5058824, 1)
 z_index = -100
 z_as_relative = false
-layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -49,13 +38,8 @@ metadata/_edit_lock_ = true
 [node name="GameObjects" type="CanvasLayer" parent="."]
 follow_viewport_enabled = true
 
-[node name="Arrow" parent="GameObjects" instance=ExtResource("2_u5sy4")]
-offset_left = 289.0
-offset_top = 452.0
-offset_right = 412.0
-offset_bottom = 504.0
-
 [node name="Panel" type="Panel" parent="GameObjects"]
+visible = false
 self_modulate = Color(0.2, 0.050980393, 0.5058824, 1)
 z_index = 1000
 offset_left = 426.0
@@ -64,162 +48,28 @@ offset_right = 1484.0
 offset_bottom = 110.0
 theme = ExtResource("5_iywne")
 
-[node name="Control" type="Control" parent="GameObjects"]
-layout_mode = 3
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -45.0
-offset_top = 106.0
-offset_right = -5.0
-offset_bottom = 146.0
-grow_horizontal = 2
-scale = Vector2(1.44, 1.44)
-
-[node name="Checkboard" type="Panel" parent="GameObjects/Control"]
-z_index = -99
-custom_minimum_size = Vector2(700, 1400)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -350.0
-offset_top = -19.30555
-offset_right = 350.0
-offset_bottom = 1380.6945
-grow_horizontal = 2
-grow_vertical = 2
-theme = SubResource("Theme_feb5d")
-
-[node name="NoteCard1" parent="GameObjects/Control" instance=ExtResource("2_iywne")]
-layout_mode = 0
-offset_left = -309.7222
-offset_top = 20.138893
-offset_right = -169.7222
-offset_bottom = 160.13889
-next_notes = Array[float]([0.25])
-
-[node name="NoteCard2" parent="GameObjects/Control" instance=ExtResource("2_iywne")]
-layout_mode = 0
-offset_left = -140.7222
-offset_top = 20.138893
-offset_right = -0.7221985
-offset_bottom = 160.13889
-notes = Array[float]([0.25])
-next_notes = Array[float]([0.125, 0.125])
-beat_num = 2
-
-[node name="NoteCard3" parent="GameObjects/Control" instance=ExtResource("2_iywne")]
-layout_mode = 0
-offset_left = 20.277803
-offset_top = 20.138893
-offset_right = 160.2778
-offset_bottom = 160.13889
-next_notes = Array[float]([0.125])
-beat_num = 3
-
-[node name="NoteCard4" parent="GameObjects/Control" instance=ExtResource("2_iywne")]
-layout_mode = 0
-offset_left = 194.2778
-offset_top = 20.138893
-offset_right = 334.2778
-offset_bottom = 160.13889
-notes = Array[float]([0.25])
-next_notes = Array[float]([0.125, 0.125])
-beat_num = 4
-
-[node name="NoteCard5" parent="GameObjects/Control" instance=ExtResource("2_iywne")]
-layout_mode = 0
-offset_left = -309.7222
-offset_top = 198.13889
-offset_right = -169.7222
-offset_bottom = 338.1389
-next_notes = Array[float]([0.25])
-beat_num = 5
-
-[node name="NoteCard6" parent="GameObjects/Control" instance=ExtResource("2_iywne")]
-layout_mode = 0
-offset_left = -140.7222
-offset_top = 198.13889
-offset_right = -0.7221985
-offset_bottom = 338.1389
-notes = Array[float]([0.25])
-next_notes = Array[float]([0.125, 0.125])
-beat_num = 6
-
-[node name="NoteCard7" parent="GameObjects/Control" instance=ExtResource("2_iywne")]
-layout_mode = 0
-offset_left = 20.277803
-offset_top = 198.13889
-offset_right = 160.2778
-offset_bottom = 338.1389
-next_notes = Array[float]([0.125])
-beat_num = 7
-
-[node name="NoteCard8" parent="GameObjects/Control" instance=ExtResource("2_iywne")]
-layout_mode = 0
-offset_left = 194.2778
-offset_top = 198.13889
-offset_right = 334.2778
-offset_bottom = 338.1389
-notes = Array[float]([0.25])
-next_notes = Array[float]([0.125, 0.125])
-beat_num = 8
-
-[node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("3_p57ef")
-
-[node name="SFXPlayer" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("4_u5sy4")
-
-[node name="HUD" type="CanvasLayer" parent="."]
-
-[node name="PointsLabel" type="Label" parent="HUD"]
-anchors_preset = 1
-anchor_left = 1.0
+[node name="MarginContainer" type="MarginContainer" parent="GameObjects"]
+anchors_preset = 15
 anchor_right = 1.0
-offset_left = -388.0
-offset_top = 3.0
-offset_right = -129.0
-offset_bottom = 93.0
-grow_horizontal = 0
-theme_override_font_sizes/font_size = 60
-text = "Score 0"
-
-[node name="StreakLabel" type="Label" parent="HUD"]
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -144.5
-offset_right = 145.5
-offset_bottom = 90.0
+anchor_bottom = 1.0
 grow_horizontal = 2
-pivot_offset = Vector2(145, 45)
-theme_override_font_sizes/font_size = 60
-text = "Combo x1"
-
-[node name="MenuButton" type="Button" parent="HUD"]
-z_index = 50
-offset_left = 1784.0
-offset_top = 1.0
-offset_right = 1885.0
-offset_bottom = 107.0
-theme_override_font_sizes/font_size = 60
-text = ">"
-autowrap_mode = 3
-
-[node name="Button" type="Button" parent="."]
-self_modulate = Color(0.61114836, 0.5265808, 0.79296875, 1)
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_top = -320.5
-offset_right = 353.0
-offset_bottom = 320.5
 grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="GameObjects/MarginContainer"]
+layout_mode = 2
+
+[node name="BoxContainer" type="BoxContainer" parent="GameObjects/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="Button" type="Button" parent="GameObjects/MarginContainer/HBoxContainer/BoxContainer"]
+self_modulate = Color(0.61114836, 0.5265808, 0.79296875, 1)
+custom_minimum_size = Vector2(300, 600)
+layout_mode = 2
 theme = ExtResource("6_p57ef")
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
@@ -229,20 +79,117 @@ theme_override_font_sizes/font_size = 100
 text = "TAP"
 metadata/_edit_lock_ = true
 
-[node name="Button2" type="Button" parent="."]
+[node name="BoxContainer2" type="BoxContainer" parent="GameObjects/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 6
+
+[node name="Panel" type="Panel" parent="GameObjects/MarginContainer/HBoxContainer/BoxContainer2"]
+self_modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(200, 700)
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="Arrow" parent="GameObjects/MarginContainer/HBoxContainer/BoxContainer2/Panel" instance=ExtResource("2_u5sy4")]
+layout_mode = 0
+
+[node name="Checkboard" type="Panel" parent="GameObjects/MarginContainer/HBoxContainer/BoxContainer2"]
+z_index = -99
+clip_contents = true
+custom_minimum_size = Vector2(700, 700)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+theme = SubResource("Theme_feb5d")
+
+[node name="NoteCard1" parent="GameObjects/MarginContainer/HBoxContainer/BoxContainer2/Checkboard" instance=ExtResource("2_iywne")]
+layout_mode = 0
+offset_left = 20.277802
+offset_top = 19.444443
+offset_right = 160.2778
+offset_bottom = 159.44444
+next_notes = Array[float]([0.25])
+
+[node name="NoteCard2" parent="GameObjects/MarginContainer/HBoxContainer/BoxContainer2/Checkboard" instance=ExtResource("2_iywne")]
+layout_mode = 0
+offset_left = 189.27783
+offset_top = 19.444443
+offset_right = 329.27783
+offset_bottom = 159.44444
+notes = Array[float]([0.25])
+next_notes = Array[float]([0.125, 0.125])
+beat_num = 2
+
+[node name="NoteCard3" parent="GameObjects/MarginContainer/HBoxContainer/BoxContainer2/Checkboard" instance=ExtResource("2_iywne")]
+layout_mode = 0
+offset_left = 350.27783
+offset_top = 19.444443
+offset_right = 490.27783
+offset_bottom = 159.44444
+next_notes = Array[float]([0.125])
+beat_num = 3
+
+[node name="NoteCard4" parent="GameObjects/MarginContainer/HBoxContainer/BoxContainer2/Checkboard" instance=ExtResource("2_iywne")]
+layout_mode = 0
+offset_left = 524.27783
+offset_top = 19.444443
+offset_right = 664.27783
+offset_bottom = 159.44444
+notes = Array[float]([0.25])
+next_notes = Array[float]([0.125, 0.125])
+beat_num = 4
+
+[node name="NoteCard5" parent="GameObjects/MarginContainer/HBoxContainer/BoxContainer2/Checkboard" instance=ExtResource("2_iywne")]
+layout_mode = 0
+offset_left = 20.277802
+offset_top = 197.44446
+offset_right = 160.2778
+offset_bottom = 337.44446
+next_notes = Array[float]([0.25])
+beat_num = 5
+
+[node name="NoteCard6" parent="GameObjects/MarginContainer/HBoxContainer/BoxContainer2/Checkboard" instance=ExtResource("2_iywne")]
+layout_mode = 0
+offset_left = 189.27783
+offset_top = 197.44446
+offset_right = 329.27783
+offset_bottom = 337.44446
+notes = Array[float]([0.25])
+next_notes = Array[float]([0.125, 0.125])
+beat_num = 6
+
+[node name="NoteCard7" parent="GameObjects/MarginContainer/HBoxContainer/BoxContainer2/Checkboard" instance=ExtResource("2_iywne")]
+layout_mode = 0
+offset_left = 350.27783
+offset_top = 197.44446
+offset_right = 490.27783
+offset_bottom = 337.44446
+next_notes = Array[float]([0.125])
+beat_num = 7
+
+[node name="NoteCard8" parent="GameObjects/MarginContainer/HBoxContainer/BoxContainer2/Checkboard" instance=ExtResource("2_iywne")]
+layout_mode = 0
+offset_left = 524.27783
+offset_top = 197.44446
+offset_right = 664.27783
+offset_bottom = 337.44446
+notes = Array[float]([0.25])
+next_notes = Array[float]([0.125, 0.125])
+beat_num = 8
+
+[node name="Panel2" type="Panel" parent="GameObjects/MarginContainer/HBoxContainer/BoxContainer2"]
+self_modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(200, 700)
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="BoxContainer3" type="BoxContainer" parent="GameObjects/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="Button" type="Button" parent="GameObjects/MarginContainer/HBoxContainer/BoxContainer3"]
 self_modulate = Color(0.61114836, 0.5265808, 0.79296875, 1)
-layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -352.0
-offset_top = -320.5
-offset_right = 1.0
-offset_bottom = 320.5
-grow_horizontal = 0
-grow_vertical = 2
+custom_minimum_size = Vector2(300, 600)
+layout_mode = 2
 theme = ExtResource("6_p57ef")
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
@@ -250,6 +197,50 @@ theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 15
 theme_override_font_sizes/font_size = 100
 text = "TAP"
+metadata/_edit_lock_ = true
+
+[node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_p57ef")
+
+[node name="SFXPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_u5sy4")
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="HudRoot" type="MarginContainer" parent="HUD"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 91.0
+grow_horizontal = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+metadata/_edit_lock_ = true
+
+[node name="PointsLabel" type="Label" parent="HUD/HudRoot"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 60
+text = "Score 0"
+
+[node name="StreakLabel" type="Label" parent="HUD/HudRoot"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 60
+text = "Combo x1"
+
+[node name="MenuButton" type="Button" parent="HUD/HudRoot"]
+z_index = 50
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 60
+text = ">"
+autowrap_mode = 3
 
 [node name="FirstBeatMetronome" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("8_0tnpc")
@@ -260,4 +251,4 @@ stream = ExtResource("9_vtaks")
 [connection signal="beat_signal" from="." to="." method="_on_beat_signal"]
 [connection signal="round_changed" from="." to="." method="_on_round_changed"]
 [connection signal="finished" from="MusicPlayer" to="." method="_on_music_player_finished"]
-[connection signal="button_up" from="HUD/MenuButton" to="." method="return_to_song_selection"]
+[connection signal="button_up" from="HUD/HudRoot/MenuButton" to="." method="return_to_song_selection"]

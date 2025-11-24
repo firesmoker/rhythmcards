@@ -5,7 +5,6 @@ class_name NoteCard extends Panel
 @onready var late_note_1: Note = $LateNote1
 @onready var early_note_2: Note = $EarlyNote2
 @onready var late_note_2: Note = $LateNote2
-
 @onready var display_note_1: Note = $NoteCardDisplay/DisplayNote1
 @onready var display_note_2: Note = $NoteCardDisplay/DisplayNote2
 var scrolling: bool = false
@@ -36,6 +35,7 @@ var active: bool:
 @export var beat_num: int = 1
 var game: Game
 @onready var selection_panel: Panel = $SelectionPanel
+
 
 func set_notes_visibility() -> void:
 	note_1.visible = false
@@ -220,6 +220,7 @@ func _ready() -> void:
 		game.activate_signal.connect(toggle_by_beat)
 		game.activate_signal.connect(activate_signal_effects)
 		game.scroll.connect(start_scrolling)
+		game.forward_note_card_location(self)
 
 func start_deactivation_timer(round_beat: int,time: float) -> void:
 	if beat_num == round_beat:

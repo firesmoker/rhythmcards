@@ -9,6 +9,7 @@ z_index = 1
 custom_minimum_size = Vector2(140, 140)
 offset_right = 140.0
 offset_bottom = 140.0
+pivot_offset = Vector2(70, 0)
 theme = ExtResource("1_fmbix")
 script = ExtResource("1_43uvi")
 notes = Array[float]([0.125, 0.125])

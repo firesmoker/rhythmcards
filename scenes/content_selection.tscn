@@ -3,18 +3,11 @@
 [ext_resource type="Script" uid="uid://c50ufm5enek0k" path="res://scripts/content_selection_screen.gd" id="1_8rqad"]
 [ext_resource type="Theme" uid="uid://cepfdjvip3jem" path="res://background_theme.tres" id="1_jnc02"]
 
-[node name="ContentSelection" type="Control"]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="ContentSelection" type="CanvasLayer"]
 script = ExtResource("1_8rqad")
 
 [node name="Background" type="Panel" parent="."]
 z_index = -10
-layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -22,80 +15,62 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_jnc02")
 
-[node name="SongScroller" type="ScrollContainer" parent="."]
-layout_mode = 1
+[node name="MenuRoot" type="MarginContainer" parent="."]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = -384.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_top = 50
+theme_override_constants/margin_right = 50
+theme_override_constants/margin_bottom = 50
 
-[node name="SongGrid" type="GridContainer" parent="SongScroller"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MenuRoot"]
+layout_mode = 2
+
+[node name="SongScroller" type="ScrollContainer" parent="MenuRoot/HBoxContainer"]
+custom_minimum_size = Vector2(1300, 0)
+layout_mode = 2
+
+[node name="SongGrid" type="GridContainer" parent="MenuRoot/HBoxContainer/SongScroller"]
 layout_mode = 2
 columns = 8
 
-[node name="CheckButton" type="CheckButton" parent="."]
-layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -315.99988
-offset_top = -286.0
-offset_right = -271.99988
-offset_bottom = -262.0
-grow_horizontal = 0
-grow_vertical = 2
-scale = Vector2(6.7, 6.7)
+[node name="VBoxContainer" type="VBoxContainer" parent="MenuRoot/HBoxContainer"]
+custom_minimum_size = Vector2(83.31, 0)
+layout_mode = 2
 
-[node name="Label" type="Label" parent="CheckButton"]
-layout_mode = 0
-offset_top = 19.701494
-offset_right = 41.0
-offset_bottom = 42.701492
-text = "Hints"
+[node name="CheckButton" type="CheckButton" parent="MenuRoot/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+text = "HINTS"
+expand_icon = true
 
-[node name="MetronomeCheck" type="CheckButton" parent="."]
-layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -845.0
-offset_top = 73.0
-offset_right = -801.0
-offset_bottom = 97.0
-grow_horizontal = 0
-grow_vertical = 2
-scale = Vector2(6.7, 6.7)
+[node name="MetronomeCheck" type="CheckButton" parent="MenuRoot/HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+text = "Metronome"
 
-[node name="Label" type="Label" parent="MetronomeCheck"]
+[node name="Label" type="Label" parent="MenuRoot/HBoxContainer/VBoxContainer/MetronomeCheck"]
+visible = false
 layout_mode = 0
 offset_top = 19.701494
 offset_right = 41.0
 offset_bottom = 42.701492
 text = "Metronome"
 
-[node name="VibTime" type="TextEdit" parent="."]
-layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -199.0
-offset_top = -17.0
-offset_right = -17.0
-offset_bottom = 73.0
-grow_horizontal = 0
-grow_vertical = 2
+[node name="VibTime" type="TextEdit" parent="MenuRoot/HBoxContainer/VBoxContainer"]
+visible = false
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
 theme_override_font_sizes/font_size = 40
+text = "vib time"
 placeholder_text = "50"
 
-[node name="Label" type="Label" parent="VibTime"]
+[node name="Label" type="Label" parent="MenuRoot/HBoxContainer/VBoxContainer/VibTime"]
+visible = false
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -110,23 +85,16 @@ grow_vertical = 0
 theme_override_font_sizes/font_size = 30
 text = "vib time"
 
-[node name="VibAmp" type="TextEdit" parent="."]
-layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -421.0
-offset_top = -14.0
-offset_right = -239.0
-offset_bottom = 76.0
-grow_horizontal = 0
-grow_vertical = 2
+[node name="VibAmp" type="TextEdit" parent="MenuRoot/HBoxContainer/VBoxContainer"]
+visible = false
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
 theme_override_font_sizes/font_size = 40
+text = "vib amp"
 placeholder_text = "50"
 
-[node name="Label" type="Label" parent="VibAmp"]
+[node name="Label" type="Label" parent="MenuRoot/HBoxContainer/VBoxContainer/VibAmp"]
+visible = false
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -141,22 +109,13 @@ grow_vertical = 0
 theme_override_font_sizes/font_size = 30
 text = "vib amp"
 
-[node name="ChangeVib" type="Button" parent="."]
-layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -511.0
-offset_top = 112.0
-offset_right = -16.0
-offset_bottom = 211.0
-grow_horizontal = 0
-grow_vertical = 2
+[node name="ChangeVib" type="Button" parent="MenuRoot/HBoxContainer/VBoxContainer"]
+visible = false
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
 theme_override_font_sizes/font_size = 66
 text = "Change Vibrate"
 
-[connection signal="toggled" from="CheckButton" to="." method="_on_check_button_toggled"]
-[connection signal="toggled" from="MetronomeCheck" to="." method="_on_metronome_check_toggled"]
-[connection signal="button_up" from="ChangeVib" to="." method="_on_change_vib_button_up"]
+[connection signal="toggled" from="MenuRoot/HBoxContainer/VBoxContainer/CheckButton" to="." method="_on_check_button_toggled"]
+[connection signal="toggled" from="MenuRoot/HBoxContainer/VBoxContainer/MetronomeCheck" to="." method="_on_metronome_check_toggled"]
+[connection signal="button_up" from="MenuRoot/HBoxContainer/VBoxContainer/ChangeVib" to="." method="_on_change_vib_button_up"]
